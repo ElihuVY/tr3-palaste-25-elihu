@@ -8,10 +8,6 @@ import LoginView from '@/views/user/LoginView.vue';
 import RegisterView from '@/views/user/RegisterView.vue';
 import ProfileView from '@/views/user/ProfileView.vue';
 
-const router = createRouter({
-  history: createWebHistory(), 
-  routes,
-});
 
 const routes = [
   {
@@ -52,6 +48,10 @@ const routes = [
   },
 ];
 
+const router = createRouter({
+  history: createWebHistory(), 
+  routes,
+});
 
 
 // TODO: Middleware para proteger rutas que requieren autenticación

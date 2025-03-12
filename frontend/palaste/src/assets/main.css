@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: theme(colors.slate.900);
+  --foreground: theme(colors.slate.100);
+}

@@ -1,7 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
     darkMode: ['class'],
-    content: ['./index.html', './src/**/*.{ts,js,vue}'],
+    content: ['./index.html', './src/**/*.{ts,js,vue}', './node_modules/preline/preline.js'],
   theme: {
   	extend: {
   		borderRadius: {
@@ -53,5 +54,6 @@ module.exports = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")
+  ],
 }
