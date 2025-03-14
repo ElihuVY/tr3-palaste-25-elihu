@@ -3,7 +3,7 @@ import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import Carousel from '@/components/Carousel.vue';
 import Header from '@/components/Header.vue';
-
+import socialMedia from '@/components/socialMedia.vue';
 </script>
 
 
@@ -32,10 +32,14 @@ import Header from '@/components/Header.vue';
     </main>
   </div>
 
-
+  <footer class="flex justify-center items-center py-6 bg-gray-800 text-white">
+      <socialMedia />
+    </footer>
 
 </template>
 <style scoped>
+
+
 .router-link-active {
   @apply font-bold text-primary;
 }
