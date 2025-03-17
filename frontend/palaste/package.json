@@ -16,6 +16,7 @@
     "normalize.css": "^8.0.1",
     "pinia": "^3.0.1",
     "preline": "^3.0.0",
+    "quasar": "^2.18.1",
     "reka-ui": "^2.0.2",
     "swiper": "^11.2.5",
     "tailwind-merge": "^3.0.2",

@@ -17,8 +17,8 @@
         <!-- Precio y valoración -->
         <div class="mt-2 mb-5 flex items-center justify-between">
           <p>
-            <span class="text-3xl font-bold text-slate-900">${{ product.price }}</span>
-            <span v-if="product.oldPrice" class="text-sm text-slate-900 line-through">${{ product.oldPrice }}</span>
+            <span class="text-3xl font-bold text-slate-900">€{{ product.price }}</span>
+            <span v-if="product.oldPrice" class="text-sm text-slate-900 line-through">€{{ product.oldPrice }}</span>
           </p>
           <div class="flex items-center">
             <!-- Iconos de estrellas (valoración) -->
@@ -26,7 +26,7 @@
               v-for="star in 5"
               :key="star"
               aria-hidden="true"
-              class="h-5 w-5"
+              class="h-5 w-4"
               :class="star <= product.rating ? 'text-yellow-300' : 'text-gray-300'"
               fill="currentColor"
               viewBox="0 0 20 20"
