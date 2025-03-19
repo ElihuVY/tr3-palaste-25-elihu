@@ -41,7 +41,7 @@ class AuthController extends Controller
         $request->validate([ 
             'name' => 'required|string|max:255', 
             'email' => 'required|string|email|max:255|unique:users', 
-            'password' => 'required|string|min:8', 
+            'password' => 'required|string|min:8|confirmed', 
             
         ]); 
         
@@ -50,19 +50,21 @@ class AuthController extends Controller
             'email' => $request->email, 
             'password' => Hash::make($request->password), 
         ]); 
+        
+        $token = $user->createToken('auth_token')->plainTextToken; 
 
         Mail::to($user->email)->send(new WelcomeMail($user));
 
-        $token = $user->createToken('auth_token')->plainTextToken; 
     
         
 
         //$pdf = Pdf::loadView('pdf.user', compact('user'));
         //$pdfContent = $pdf->output(); 
 
-        $user->notify(new WelcomeNotification($user));
+        //$user->notify(new WelcomeNotification($user));
 
         return response()->json([ 
+            'message' => 'Usuario registrado exitosamente',
             'user' => $user, 
             'token' => $token 
         ]); 

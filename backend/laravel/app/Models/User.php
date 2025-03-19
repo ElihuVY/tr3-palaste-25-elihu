@@ -11,16 +11,14 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory;
 
     protected $fillable = [
-        'username', 
+        'name', 
         'email', 
         'password',
-        'personal_access_token', // Incluido para almacenar el token
     ];
 
     protected $hidden = [
         'password', 
         'remember_token', 
-        'personal_access_token', // Ocultar el token en respuestas por defecto
     ];
 
     protected $casts = [
