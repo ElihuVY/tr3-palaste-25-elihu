@@ -1,80 +1,44 @@
-//LIBRERIA: Shadcn-vue
-<template>
-    <header class="bg-slate-900 p-4 rounded-lg shadow-md flex gap-4">
-      <NavigationMenu>
-        <NavigationMenuList class="bg-slate-900 p-4 rounded-lg shadow-md flex gap-4">
-          <NavigationMenuItem>
-            <RouterLink to="/home"
-              class="block p-3 rounded-md transition hover:bg-accent hover:text-accent-foreground text-white">
-              <div class="text-sm font-medium">Inicio</div>
-            </RouterLink>
-          </NavigationMenuItem>
-  
-          <NavigationMenuItem>
-            <RouterLink to="/tienda"
-              class="block p-3 rounded-md transition hover:bg-accent hover:text-accent-foreground text-white">
-              <div class="text-sm font-medium">Tienda</div>
-            </RouterLink>
-          </NavigationMenuItem>
-  
-          <NavigationMenuItem>
-            <RouterLink to="/presupuesto"
-              class="block p-3 rounded-md transition hover:bg-accent hover:text-accent-foreground text-white">
-              <div class="text-sm font-medium">Presupuesto</div>
-            </RouterLink>
-          </NavigationMenuItem>
-  
-          <NavigationMenuItem>
-            <NavigationMenuTrigger class="text-white">Usuario</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul class="grid gap-2 p-1 w-[100px] md:w-[330px]">
-                <li>
-                  <NavigationMenuLink as-child>
-                    <RouterLink to="/registro" class="block p-3 rounded-md transition hover:bg-accent text-white">
-                      <div class="text-sm font-medium">Registro</div>
-                      <p class="text-sm text-muted-foreground">Crea una cuenta nueva.</p>
-                    </RouterLink>
-                  </NavigationMenuLink>
-                </li>
-                <li>
-                  <NavigationMenuLink as-child>
-                    <RouterLink to="/iniciar-sesion" class="block p-3 rounded-md transition hover:bg-accent text-white">
-                      <div class="text-sm font-medium">Iniciar Sesión</div>
-                      <p class="text-sm text-muted-foreground">Accede con tu cuenta.</p>
-                    </RouterLink>
-                  </NavigationMenuLink>
-                </li>
-                <li>
-                  <NavigationMenuLink as-child>
-                    <RouterLink to="/profile" class="block p-3 rounded-md transition hover:bg-accent text-white">
-                      <div class="text-sm font-medium">Perfil</div>
-                      <p class="text-sm text-muted-foreground">Información de tu cuenta.</p>
-                    </RouterLink>
-                  </NavigationMenuLink>
-                </li>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </header>
-  </template>
-  
-  <script setup>
-  // Si necesitas importar algún componente global o usar alguna lógica en este componente, lo haces aquí.
+<script setup>
+import { useAuthStore } from '@/stores/counter.js';
 
-  import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
-import { RouterLink } from 'vue-router';
-  </script>
-  
-  <style scoped>
-  /* Puedes agregar estilos específicos para este componente aquí si lo necesitas */
-  </style>
-  
+const authStore = useAuthStore();
+</script>
+
+<template>
+  <nav class="bg-gray-800 shadow-lg">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center h-16">
+        <router-link to="/" class="text-4xl font-bold text-white hover:text-gray-300 transition">
+          PALASTE
+        </router-link>
+
+        <div class="flex space-x-4">
+          <router-link to="/" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
+            Inicio
+          </router-link>
+          <router-link to="/tienda" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
+            Tienda
+          </router-link>
+          <router-link to="/presupuesto" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
+            Solicita tu Proyecto
+          </router-link>
+          
+          <template v-if="!authStore.isAuthenticated">
+            <router-link to="/iniciar-sesion" class="bg-gray-700 text-white hover:bg-gray-600 px-4 py-2 rounded-md transition duration-300 font-semibold">
+              Iniciar Sesión
+            </router-link>
+          </template>
+          
+          <template v-else>
+            <router-link to="/perfil" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
+              Perfil
+            </router-link>
+            <button @click="authStore.logout" class="text-white hover:bg-red-600 px-4 py-2 rounded-md transition duration-300">
+              Cerrar Sesión
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
+  </nav>
+</template>

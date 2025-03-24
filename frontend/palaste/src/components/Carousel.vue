@@ -6,7 +6,7 @@
       data-hs-carousel='{
         "loadingClasses": "opacity-0",
         "isAutoPlay": true,
-        "autoPlayInterval": 5000,
+        "autoPlayInterval": 8000,
         "transitionDuration": 700
       }'
     >

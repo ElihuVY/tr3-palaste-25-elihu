@@ -1,31 +1,32 @@
-import { ref, computed, reactive } from 'vue'
-
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const useCounterStore = defineStore('counter', () => {
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref(null)
+  const isAuthenticated = ref(false)
 
-  const loginInfo = reactive({
-    loggedIn: false,
-    username: '',
-    email: '',
-    token: '',
-  });
+  const login = (credentials) => {
+    // Implementar lógica de login aquí
+    isAuthenticated.value = true
+    user.value = { email: credentials.email }
+  }
 
-  const setLoginInfo = ({ loggedIn, username, email, token }) => {
-    loginInfo.loggedIn = loggedIn;
-    loginInfo.username = username;
-    loginInfo.email = email;
-    loginInfo.token = token;
-    
-  };
+  const register = (userData) => {
+    // Implementar lógica de registro aquí
+    isAuthenticated.value = true
+    user.value = { email: userData.email }
+  }
 
-
-  const getLoginInfo = computed(() => loginInfo);
+  const logout = () => {
+    user.value = null
+    isAuthenticated.value = false
+  }
 
   return {
-    getLoginInfo, loginInfo, setLoginInfo,
-
+    user,
+    isAuthenticated,
+    login,
+    register,
+    logout
   }
-}, {
-  persist: true
 })
