@@ -5,11 +5,13 @@
     </div>
     <h2 class="text-lg text-gray-400 mb-6">Inicia sesión</h2>
 
-    <form class="space-y-4">
+    <form @submit.prevent="manejarInicioSesion" class="space-y-4">
       <div class="relative">
         <input 
-          type="text" 
-          placeholder="Usuario" 
+          type="email" 
+          placeholder="Email" 
+          v-model="email"
+          required
           class="w-full p-3 pl-10 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" 
@@ -24,6 +26,8 @@
         <input 
           type="password" 
           placeholder="Contraseña" 
+          v-model="password"
+          required
           class="w-full p-3 pl-10 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" 
@@ -34,8 +38,14 @@
         </svg>
       </div>
 
-      <button class="w-full p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
-        Iniciar sesión
+      <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
+
+      <button 
+        type="submit" 
+        :disabled="loading"
+        class="w-full p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+      >
+         {{ loading ? 'Cargando...' : 'Iniciar Sesión' }}
       </button>
 
       <div class="flex justify-between text-sm text-gray-400">
@@ -47,5 +57,38 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useAuthStore } from '@/stores/authStore.js';
+import { useRouter } from 'vue-router';
 
+const authStore = useAuthStore();
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+const errorMessage = ref('');
+const loading = ref(false);
+
+const manejarInicioSesion = async () => {
+  errorMessage.value = '';
+  loading.value = true;
+
+  try {
+    if (email.value === 'usuario@example.com' && password.value === '123456') {
+      authStore.setLoginInfo({
+        loggedIn: true,
+        username: 'UsuarioEjemplo',
+        email: email.value,
+        token: 'fake-jwt-token'
+      });
+      router.push('/home'); 
+    } else {
+      throw new Error('Credenciales incorrectas');
+    }
+  } catch (error) {
+    errorMessage.value = error.message;
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     protected $middleware = [
+        \App\Http\Middleware\CorsMiddleware::class,
         \Illuminate\Http\Middleware\TrustHosts::class,
         \Illuminate\Http\Middleware\TrustProxies::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,

@@ -10,7 +10,6 @@ use App\Mail\WelcomeMail;
 use App\Notifications\WelcomeNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\App;
-//use Barryvdh\DomPDF\Facade\Pdf as PDF; 
 
 
 class AuthController extends Controller
@@ -55,14 +54,6 @@ class AuthController extends Controller
 
         Mail::to($user->email)->send(new WelcomeMail($user));
 
-    
-        
-
-        //$pdf = Pdf::loadView('pdf.user', compact('user'));
-        //$pdfContent = $pdf->output(); 
-
-        //$user->notify(new WelcomeNotification($user));
-
         return response()->json([ 
             'message' => 'Usuario registrado exitosamente',
             'user' => $user, 
@@ -76,49 +67,21 @@ class AuthController extends Controller
      return response()->json(['message' => 'Sesión cerrada correctamente']); 
  }
 
- /*public function getUserInfo(Request $request)
- {
-     $user = Auth::user();
-     $infoUsuari = InfoUsuari::where('user_id', $user->id)->first();
- 
-     //$pdf = PDF::loadView('pdf.user', compact('user', 'infoUsuari'));
-     //$pdfContent = $pdf->output();
- 
-     //$user->notify(new WelcomeNotification($user, $pdfContent));
- 
-     return response()->json([
-         'user' => $user,
-         'infoUsuari' => $infoUsuari,
-     ]);
- }*/
- 
+ public function user(Request $request)
+    {
+        return response()->json($request->user());
+    }
 
 
- /*public function setUserInfo(Request $request)
- {
-     $request->validate([
-         'telefon' => 'required|string|max:20',
-         'pais_residencia' => 'required|string|max:255',
-     ]);
- 
-     $user = Auth::user();
- 
-     $infoUsuari = InfoUsuari::updateOrCreate(
-         ['user_id' => $user->id],
-         ['telefon' => $request->telefon, 'pais_residencia' => $request->pais_residencia]
-     );
- 
-     $pdf = PDF::loadView('pdf.user', compact('user', 'infoUsuari'));
-     $pdfContent = $pdf->output();
- 
-     $user->notify(new WelcomeNotification($user, $pdfContent));
- 
-     return response()->json([
-         'message' => 'Información actualizada correctamente',
-         'infoUsuari' => $infoUsuari,
-     ]);
- }*/
- 
+    public function cambiarContrasena(Request $request)
+    {
+       $usuario = $request->user();
+       if (!Hash::check($request->contrasena_actual, $usuario->password)) {
+           return response()->json(['mensaje' => 'La contraseña actual es incorrecta.'], 403);
+       }
 
+       $usuario->update(['password' => Hash::make($request->nueva_contrasena)]);
+       return response()->json(['mensaje' => 'Contraseña actualizada correctamente.'], 200);
+    }
 
 }

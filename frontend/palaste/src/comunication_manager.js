@@ -1,6 +1,12 @@
 export const laravel = { URL: "http://127.0.0.1:8000/api" };
 
-export async function register(param) {
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+  
+  
+  export async function register(param) {
     const URL = `${laravel.URL}/register`;
     const response = await fetch(URL, {
         method: 'POST',
@@ -18,21 +24,24 @@ export async function register(param) {
     return data;
 }
 
-export async function login(param) {
-    const URL = `${laravel.URL}/login`;
-    const response = await fetch(URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: param.username,
-            password: param.password
-        })
-    });
+    export async function login(param) {
+        const URL = `${laravel.URL}/login`;
+        const response = await fetch(URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: param.email,
+                password: param.password
+            })
+        });
+    
+        const data = await response.json();
+        console.log(data)
+        return data;
+    }
+  
 
-    const data = await response.json();
-    console.log(data)
-    return data;
-}
-
+    
+  

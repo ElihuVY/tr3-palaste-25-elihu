@@ -7,7 +7,7 @@ import ShopView from '@/views/ShopView.vue';
 import LoginView from '@/views/user/LoginView.vue';
 import RegisterView from '@/views/user/RegisterView.vue';
 import ProfileView from '@/views/user/ProfileView.vue';
-
+import Dashboard from '@/views/Dashboard.vue';
 
 const routes = [
   {
@@ -39,6 +39,11 @@ const routes = [
     path: '/perfil', 
     name: 'profile',
     component: ProfileView,
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    meta: { requiresAuth: true }
   },
   
   // ruta para manejar páginas no encontradas (404)

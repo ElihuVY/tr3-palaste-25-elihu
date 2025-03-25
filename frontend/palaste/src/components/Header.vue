@@ -1,7 +1,25 @@
 <script setup>
-import { useAuthStore } from '@/stores/counter.js';
+import { useAuthStore } from '@/stores/authStore.js';
+import { ref, computed } from 'vue';
 
 const authStore = useAuthStore();
+const visibleLog = ref(false);
+
+// Computed para acceder al estado de login
+const isLoggedIn = computed(() => authStore.getLoginInfo.loggedIn);
+
+async function salir() {
+  authStore.setLoginInfo({
+    loggedIn: false,
+    username: '',
+    email: '',
+    token: '',
+  });
+  visibleLog.value = false;
+}
+
+// Actualizar el estado de visibilidad
+visibleLog.value = isLoggedIn.value;
 </script>
 
 <template>
@@ -23,7 +41,7 @@ const authStore = useAuthStore();
             Solicita tu Proyecto
           </router-link>
           
-          <template v-if="!authStore.isAuthenticated">
+          <template v-if="!isLoggedIn">
             <router-link to="/iniciar-sesion" class="bg-gray-700 text-white hover:bg-gray-600 px-4 py-2 rounded-md transition duration-300 font-semibold">
               Iniciar Sesión
             </router-link>
@@ -33,7 +51,7 @@ const authStore = useAuthStore();
             <router-link to="/perfil" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
               Perfil
             </router-link>
-            <button @click="authStore.logout" class="text-white hover:bg-red-600 px-4 py-2 rounded-md transition duration-300">
+            <button @click="salir" class="text-white hover:bg-red-600 px-4 py-2 rounded-md transition duration-300">
               Cerrar Sesión
             </button>
           </template>
