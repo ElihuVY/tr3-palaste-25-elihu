@@ -36,7 +36,11 @@ class AuthController extends Controller
             'message' => 'Credenciales incorrectas',
         ], 401);
     }
+
+
     public function register(Request $request){
+        try{
+        
         $request->validate([ 
             'name' => 'required|string|max:255', 
             'email' => 'required|string|email|max:255|unique:users', 
@@ -51,15 +55,28 @@ class AuthController extends Controller
         ]); 
         
         $token = $user->createToken('auth_token')->plainTextToken; 
-
+        
         Mail::to($user->email)->send(new WelcomeMail($user));
-
+        
         return response()->json([ 
             'message' => 'Usuario registrado exitosamente',
             'user' => $user, 
             'token' => $token 
         ]); 
+    } catch(Exception $e){
+        error_log($e->getMessage());
     }
+
+}
+
+    
+public function showLoginForm()
+{
+    return view('auth.login');
+}
+
+
+
     public function logout(Request $request) 
  { 
      $request->user()->tokens()->delete(); 

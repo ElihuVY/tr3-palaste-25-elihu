@@ -7,7 +7,7 @@
 
     <form class="space-y-4" @submit.prevent="registrar">
       <div class="relative">
-        <input v-model="username" type="text" placeholder="Usuario"
+        <input v-model="name" type="text" placeholder="Usuario"
           class="w-full p-3 pl-10 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required />
       </div>
@@ -58,7 +58,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const authStore = useAuthStore();
-const username = ref('');
+const name = ref('');
 const email = ref('');
 const password = ref('');
 const password_confirmation = ref('');
@@ -74,16 +74,16 @@ async function registrar() {
   try {
     authStore.cargando = true;
     const data = await register({
-      username: username.value,
+      name: name.value,
       email: email.value,
       password: password.value,
-      password_confirmation: password_confirmation.value
+      password_confirmation: password_confirmation.value,
     });
 
     if (!data.errors) {
       authStore.setLoginInfo({
         loggedIn: true,
-        username: data.user.username,
+        name: data.user.name,
         email: data.user.email,
         token: data.token,
       });

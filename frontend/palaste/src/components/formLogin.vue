@@ -77,7 +77,7 @@ const manejarInicioSesion = async () => {
     if (email.value === 'usuario@example.com' && password.value === '123456') {
       authStore.setLoginInfo({
         loggedIn: true,
-        username: 'UsuarioEjemplo',
+        name: 'UsuarioEjemplo',
         email: email.value,
         token: 'fake-jwt-token'
       });

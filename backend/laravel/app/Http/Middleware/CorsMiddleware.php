@@ -18,7 +18,11 @@ class CorsMiddleware
     {
         return $next($request)
             ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-            ->header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, Authorization');
+            ->header('Access-Control-Allow-Methods', '*')
+            ->header('Access-Control-Allow-Credentials', true)
+
+            //->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+            ->header('Access-Control-Allow-Headers','X-Requested-With', 'Origin, Content-Type, X-Auth-Token, Authorization')
+            ->header('Accept', 'application/json');
     }
 }

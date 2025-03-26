@@ -1,29 +1,18 @@
 <?php
-
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Laravel CORS Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the CORS settings for your application. 
-    | You can allow or restrict the origins, methods, and headers as needed.
-    |
-    */
+    'paths' => ['*'], // Permite CORS en toda la API
 
-    'paths' => ['api/*'],  // Aplica CORS solo a las rutas que comienzan con 'api/'
+    'allowed_methods' => ['*'], // Permitir cualquier método HTTP
 
-    'allowed_methods' => ['*'],  // Permite todos los métodos HTTP (GET, POST, PUT, DELETE, etc.)
+    'allowed_origins' => ['*','http://localhost:5173','http://127.0.0.1:5173'], // Cambia '' por la URL de tu frontend
 
-    'allowed_origins' => ['*'],  // Permite solicitudes desde cualquier origen (cualquier dominio)
+    'allowed_origins_patterns' => [],
 
-    'allowed_origins_patterns' => [],  // Puedes usar expresiones regulares si necesitas restringir aún más los orígenes
+    'allowed_headers' => ['*'], // Permitir cualquier encabezado
 
-    'allowed_headers' => ['*'],  // Permite todos los encabezados HTTP
+    'exposed_headers' => [],
 
-    'exposed_headers' => [],  // Si necesitas exponer algunos encabezados adicionales
+    'max_age' => 0,
 
-    'max_age' => 0,  // Tiempo en segundos que el navegador puede almacenar la respuesta CORS en caché
-
-    'supports_credentials' => false,  // Si se deben soportar credenciales (cookies, autorizaciones HTTP, etc.)
+    'supports_credentials' => true, // Si usas autenticación con cookies, ponlo en 'true'
 ];

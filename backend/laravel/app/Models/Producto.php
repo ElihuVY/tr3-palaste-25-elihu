@@ -1,25 +1,25 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['nombre', 'descripcion', 'imagen', 'precio', 'stock', 'categoria_id'];
+    protected $table = 'productos';
+    
+    protected $fillable = [
+        'nombre', 'descripcion', 'imagen', 
+        'precio', 'stock', 'categoria_id'
+    ];
 
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
     public function pedidos()
     {
-        return $this->belongsToMany(Pedido::class, 'pedido_productos')
+        return $this->belongsToMany(Pedido::class, 'pedido_producto')
                     ->withPivot('cantidad', 'precio_unitario');
     }
 }
-

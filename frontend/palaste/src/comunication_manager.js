@@ -10,16 +10,19 @@ const headers = {
     const URL = `${laravel.URL}/register`;
     const response = await fetch(URL, {
         method: 'POST',
+        mode: 'cors',
+        credentials: 'include', 
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
         },
         body: JSON.stringify({
-            username: param.username,
+            name: param.name,
             email: param.email,
             password: param.password,
+            password_confirmation: param.password_confirmation
         })
     });
-
     const data = await response.json();
     return data;
 }
@@ -28,6 +31,8 @@ const headers = {
         const URL = `${laravel.URL}/login`;
         const response = await fetch(URL, {
             method: 'POST',
+            mode: 'cors',
+            credentials: 'include', 
             headers: {
                 'Content-Type': 'application/json',
             },
