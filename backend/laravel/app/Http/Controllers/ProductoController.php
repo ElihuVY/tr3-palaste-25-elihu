@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
+
+    public function apiIndex()
+{
+    $productos = Producto::with('categoria')->paginate(40);
+    return response()->json($productos, 200);
+}
+
+
     public function index()
     {
-        $productos = Producto::with('categoria')->paginate(10);
+        $productos = Producto::with('categoria')->paginate(40);
         return view('admin.productos.index', compact('productos'));
     }
 

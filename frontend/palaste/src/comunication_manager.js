@@ -27,6 +27,30 @@ const headers = {
     return data;
 }
 
+export async function getProducts() {
+    const URL = `${laravel.URL}/products`;
+    
+    try {
+        const response = await fetch(URL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error;
+    }
+}
+
     export async function login(param) {
         const URL = `${laravel.URL}/login`;
         const response = await fetch(URL, {
