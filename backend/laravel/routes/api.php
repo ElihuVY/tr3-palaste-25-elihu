@@ -4,7 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\PeticionProyectoController;
+use App\Http\Controllers\UserController;
 
+use App\Http\Controllers\PerfilController;
 
 
 Route::options('{any}', function () {
@@ -18,13 +22,16 @@ Route::options('{any}', function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/products', [ProductoController::class, 'apiIndex']);
-
+    
     Route::middleware('auth:sanctum')->group(function () {
+
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
-        
 
+        Route::get('/user/profile', [UserController::class, 'getUserProfile']);
+        
+        Route::get('/perfil/datos', [PerfilController::class, 'misPedidosYPeticiones']);
         Route::post('/user/cambiar-contra', [AuthController::class, 'cambiarContrasena']);
         Route::post('/logout', [AuthController::class, 'logout']);
     });

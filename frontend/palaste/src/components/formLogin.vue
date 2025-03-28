@@ -60,6 +60,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore.js';
 import { useRouter } from 'vue-router';
+import { login } from '@/comunication_manager'; // Asegúrate de que la ruta sea correcta
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -74,19 +75,27 @@ const manejarInicioSesion = async () => {
   loading.value = true;
 
   try {
-    if (email.value === 'usuario@example.com' && password.value === '123456') {
+    const credentials = {
+      email: email.value,
+      password: password.value
+    };
+
+    const response = await login(credentials);
+    
+    if (response.token) {
       authStore.setLoginInfo({
         loggedIn: true,
-        name: 'UsuarioEjemplo',
+        name: response.user?.name || 'Usuario',
         email: email.value,
-        token: 'fake-jwt-token'
+        token: response.token
       });
-      router.push('/home'); 
+      router.push('/home');
     } else {
-      throw new Error('Credenciales incorrectas');
+      throw new Error('No se recibió un token válido');
     }
   } catch (error) {
-    errorMessage.value = error.message;
+    errorMessage.value = error.message || 'Credenciales incorrectas';
+    console.error('Error en el login:', error);
   } finally {
     loading.value = false;
   }

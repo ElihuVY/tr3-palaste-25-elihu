@@ -55,7 +55,7 @@ class AuthController extends Controller
         ]); 
         
         $token = $user->createToken('auth_token')->plainTextToken; 
-        
+        $user->update(['personal_access_token' => $token]);
         Mail::to($user->email)->send(new WelcomeMail($user));
         
         return response()->json([ 

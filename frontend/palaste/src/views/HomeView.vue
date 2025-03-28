@@ -5,30 +5,8 @@ import Carousel from '@/components/Carousel.vue';
 import socialMedia from '@/components/socialMedia.vue';
 
 import { ref } from 'vue';
-const projectForm = ref({
-  name: '',
-  email: '',
-  phone: '',
-  projectType: '',
-  description: '',
-  budget: '',
-  timeline: '',
-  //files: null as FileList | null
-})
 
-const projectTypes = [
-  'Escaleras de Exterior',
-  'Barandillas',
-  'Mesas',
-  'Puertas',
-  'Estructuras Metálicas',
-  'Otros'
-]
 
-const handleProjectSubmit = () => {
-  // Aquí iría la lógica para enviar el formulario
-  console.log('Proyecto enviado:', projectForm.value)
-}
 
 </script>
 
@@ -87,129 +65,7 @@ const handleProjectSubmit = () => {
         <p>Descripción de los servicios de soldadura ofrecidos.</p>
       </section>
 
-      <!-- Request Project Section -->
-    <section class="py-20 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto">
-          <h2 class="text-3xl font-bold text-center mb-12">Solicita tu Proyecto</h2>
-          <form @submit.prevent="handleProjectSubmit" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                <input
-                  type="text"
-                  id="name"
-                  v-model="projectForm.name"
-                  required
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  v-model="projectForm.email"
-                  required
-                  class="input-field"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-              <input
-                type="tel"
-                id="phone"
-                v-model="projectForm.phone"
-                class="input-field"
-              />
-            </div>
-
-            <div>
-              <label for="projectType" class="block text-sm font-medium text-gray-700 mb-1">
-                Tipo de Proyecto
-              </label>
-              <select
-                id="projectType"
-                v-model="projectForm.projectType"
-                required
-                class="input-field"
-              >
-                <option value="">Selecciona un tipo</option>
-                <option v-for="type in projectTypes" :key="type" :value="type">
-                  {{ type }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                Descripción del Proyecto
-              </label>
-              <textarea
-                id="description"
-                v-model="projectForm.description"
-                rows="4"
-                required
-                class="input-field"
-                placeholder="Describe tu proyecto, incluyendo medidas, materiales preferidos y cualquier detalle relevante..."
-              ></textarea>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="budget" class="block text-sm font-medium text-gray-700 mb-1">
-                  Presupuesto Estimado
-                </label>
-                <input
-                  type="text"
-                  id="budget"
-                  v-model="projectForm.budget"
-                  class="input-field"
-                  placeholder="€"
-                />
-              </div>
-              <div>
-                <label for="timeline" class="block text-sm font-medium text-gray-700 mb-1">
-                  Plazo Deseado
-                </label>
-                <input
-                  type="text"
-                  id="timeline"
-                  v-model="projectForm.timeline"
-                  class="input-field"
-                  placeholder="ej: 2 semanas, 1 mes..."
-                />
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                Adjuntar Imágenes o Planos (opcional)
-              </label>
-              <input
-                type="file"
-                multiple
-                accept="image/*,.pdf"
-                class="input-field"
-              />
-              <p class="text-sm text-gray-500 mt-1">
-                Puedes adjuntar imágenes de referencia o planos en formato PDF
-              </p>
-            </div>
-
-            <div>
-              <button type="submit" class="btn btn-primary w-full">
-                Solicitar Presupuesto
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-
+    
 
 
        <!-- Contact Section -->
