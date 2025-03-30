@@ -1,11 +1,12 @@
 <script setup>
 import { useAuthStore } from '@/stores/authStore.js';
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
 const visibleLog = ref(false);
+const router = useRouter();
 
-// Computed para acceder al estado de login
 const isLoggedIn = computed(() => authStore.getLoginInfo.loggedIn);
 
 async function salir() {
@@ -16,6 +17,7 @@ async function salir() {
     token: '',
   });
   visibleLog.value = false;
+  router.push('/home'); 
 }
 
 // Actualizar el estado de visibilidad
@@ -51,6 +53,7 @@ visibleLog.value = isLoggedIn.value;
             <router-link to="/perfil" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
               Perfil
             </router-link>
+
             <button @click="salir" class="text-white hover:bg-red-600 px-4 py-2 rounded-md transition duration-300">
               Cerrar Sesión
             </button>

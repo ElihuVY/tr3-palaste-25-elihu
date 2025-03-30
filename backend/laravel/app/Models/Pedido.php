@@ -1,16 +1,25 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pedido extends Model
 {
-    protected $table = 'pedidos';
-    
-    protected $fillable = ['user_id', 'total', 'estado'];
+    use HasFactory;
 
-    protected $casts = [
-        'estado' => 'string'
+    protected $fillable = [
+        'user_id',
+        'total',
+        'estado',
+        'nombre',
+        'apellido',
+        'email',
+        'telefono',
+        'direccion',
+        'ciudad',
+        'codigo_postal',
+        'notas'
     ];
 
     public function user()
@@ -18,9 +27,8 @@ class Pedido extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function productos()
+    public function items()
     {
-        return $this->belongsToMany(Producto::class, 'pedido_producto')
-                    ->withPivot('cantidad', 'precio_unitario');
+        return $this->hasMany(PedidoItem::class);
     }
 }

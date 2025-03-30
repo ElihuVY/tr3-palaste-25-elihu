@@ -167,8 +167,8 @@ const sugerirProductos = computed(() => {
                 class="w-full accent-blue-600"
               />
               <div class="flex justify-between mt-2">
-                <span>${{ rangoPrecio[0] }}</span>
-                <span>${{ rangoPrecio[1] }}</span>
+                <span>€{{ rangoPrecio[0] }}</span>
+                <span>€{{ rangoPrecio[1] }}</span>
               </div>
             </div>
           </div>
@@ -201,7 +201,7 @@ const sugerirProductos = computed(() => {
               <h3 class="text-lg font-semibold">{{ producto.name }}</h3>
               <p class="text-gray-600 mt-2 line-clamp-2">{{ producto.description }}</p>
               <div class="mt-4 flex justify-between items-center">
-                <span class="text-xl font-bold">${{ producto.price }}</span>
+                <span class="text-xl font-bold">€{{ producto.price }}</span>
                 
                 <div class="button">
                   <div class="button-wrapper" @click="addToCart(producto)">

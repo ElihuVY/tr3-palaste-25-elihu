@@ -34,7 +34,9 @@ Route::options('{any}', function () {
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
-
+        Route::post('/pedidos', [PedidoController::class, 'store']);
+        Route::get('/pedidos/{id}', [PedidoController::class, 'show']);
+        
         Route::get('/user/profile', [UserController::class, 'getUserProfile']);
         Route::get('/perfil/datos', [PerfilController::class, 'misPedidosYPeticiones']);
 

@@ -17,9 +17,8 @@ class Producto extends Model
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-    public function pedidos()
+    public function pedidoItems()
     {
-        return $this->belongsToMany(Pedido::class, 'pedido_producto')
-                    ->withPivot('cantidad', 'precio_unitario');
+        return $this->hasMany(PedidoItem::class, 'producto_id');
     }
 }
