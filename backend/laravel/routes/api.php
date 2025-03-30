@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PedidoController;
-use App\Http\Controllers\PeticionProyectoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProjectRequestController;
+
 
 use App\Http\Controllers\PerfilController;
 
@@ -23,6 +24,11 @@ Route::options('{any}', function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/products', [ProductoController::class, 'apiIndex']);
     
+    Route::prefix('project-requests')->group(function () {
+        Route::post('/', [ProjectRequestController::class, 'store']);
+        Route::get('/project-types', [ProjectRequestController::class, 'getProjectTypes']);
+    });
+    
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/user', function (Request $request) {
@@ -30,8 +36,8 @@ Route::options('{any}', function () {
         });
 
         Route::get('/user/profile', [UserController::class, 'getUserProfile']);
-        
         Route::get('/perfil/datos', [PerfilController::class, 'misPedidosYPeticiones']);
+
         Route::post('/user/cambiar-contra', [AuthController::class, 'cambiarContrasena']);
         Route::post('/logout', [AuthController::class, 'logout']);
     });

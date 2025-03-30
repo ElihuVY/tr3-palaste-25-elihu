@@ -37,10 +37,10 @@
         <h3 class="section-title">🔧 Tipo de Proyecto</h3>
         <div class="project-type-options">
           <button type="button" 
-                  v-for="type in projectTypes" 
+                  v-for="type in project_types" 
                   :key="type.value" 
-                  @click="selectProjectType(type.value)"
-                  :class="['type-option', { 'active': form.projectType === type.value }]">
+                  @click="selectproject_type(type.value)"
+                  :class="['type-option', { 'active': form.project_type === type.value }]">
             <span class="type-icon">{{ type.icon }}</span>
             {{ type.label }}
           </button>
@@ -48,11 +48,11 @@
       </div>
       
       <!-- Opciones específicas según tipo de proyecto -->
-      <div v-if="form.projectType" class="specific-options-section">
+      <div v-if="form.project_type" class="specific-options-section">
         <h3 class="section-title">⚙️ Detalles del Proyecto</h3>
         
         <!-- Opciones para escaleras -->
-        <div v-if="form.projectType === 'stairs'" class="options-group">
+        <div v-if="form.project_type === 'stairs'" class="options-group">
           <div class="form-row">
             <div class="form-group">
               <label for="stairs-type">Tipo de escalera:</label>
@@ -102,7 +102,7 @@
         </div>
         
         <!-- Opciones para barandillas -->
-        <div v-if="form.projectType === 'railings'" class="options-group">
+        <div v-if="form.project_type === 'railings'" class="options-group">
           <div class="form-row">
             <div class="form-group">
               <label for="railings-location">Ubicación:</label>
@@ -147,7 +147,7 @@
         </div>
         
         <!-- Opciones para puertas -->
-        <div v-if="form.projectType === 'doors'" class="options-group">
+        <div v-if="form.project_type === 'doors'" class="options-group">
           <div class="form-row">
             <div class="form-group">
               <label for="door-type">Tipo de puerta:</label>
@@ -192,7 +192,7 @@
         </div>
         
         <!-- Opciones para otros proyectos -->
-        <div v-if="form.projectType === 'other'" class="options-group">
+        <div v-if="form.project_type === 'other'" class="options-group">
           <div class="form-group">
             <label for="other-type">¿Qué necesitas?</label>
             <select id="other-type" v-model="form.other.type" class="form-select">
@@ -286,33 +286,33 @@
         
         <div class="request-summary">
           <h4>Resumen de tu solicitud:</h4>
-          <p><strong>Tipo de proyecto:</strong> {{ getProjectTypeLabel(savedRequest.projectType) }}</p>
+          <p><strong>Tipo de proyecto:</strong> {{ getproject_typeLabel(savedRequest.project_type) }}</p>
           <p><strong>Nombre:</strong> {{ savedRequest.name }}</p>
           <p><strong>Contacto:</strong> {{ savedRequest.phone }} | {{ savedRequest.email }}</p>
           <p v-if="savedRequest.address"><strong>Dirección:</strong> {{ savedRequest.address }}</p>
           
           <!-- Mostrar detalles específicos según el tipo de proyecto -->
-          <div v-if="savedRequest.projectType === 'stairs'">
+          <div v-if="savedRequest.project_type === 'stairs'">
             <p><strong>Tipo de escalera:</strong> {{ savedRequest.stairs.type || 'No especificado' }}</p>
             <p><strong>Material:</strong> {{ savedRequest.stairs.material || 'No especificado' }}</p>
             <p v-if="savedRequest.stairs.hasRailings === 'yes'"><strong>Estilo de barandillas:</strong> {{ savedRequest.stairs.railingsStyle || 'No especificado' }}</p>
           </div>
           
-          <div v-else-if="savedRequest.projectType === 'railings'">
+          <div v-else-if="savedRequest.project_type === 'railings'">
             <p><strong>Ubicación:</strong> {{ savedRequest.railings.location || 'No especificado' }}</p>
             <p><strong>Material:</strong> {{ savedRequest.railings.material || 'No especificado' }}</p>
             <p><strong>Estilo:</strong> {{ savedRequest.railings.style || 'No especificado' }}</p>
             <p v-if="savedRequest.railings.height"><strong>Altura:</strong> {{ savedRequest.railings.height }} cm</p>
           </div>
           
-          <div v-else-if="savedRequest.projectType === 'doors'">
+          <div v-else-if="savedRequest.project_type === 'doors'">
             <p><strong>Tipo de puerta:</strong> {{ savedRequest.doors.type || 'No especificado' }}</p>
             <p><strong>Material:</strong> {{ savedRequest.doors.material || 'No especificado' }}</p>
             <p><strong>Estilo:</strong> {{ savedRequest.doors.style || 'No especificado' }}</p>
             <p v-if="savedRequest.doors.dimensions"><strong>Dimensiones:</strong> {{ savedRequest.doors.dimensions }}</p>
           </div>
           
-          <div v-else-if="savedRequest.projectType === 'other'">
+          <div v-else-if="savedRequest.project_type === 'other'">
             <p><strong>Tipo:</strong> {{ savedRequest.other.type || 'No especificado' }}</p>
             <p v-if="savedRequest.other.details"><strong>Detalles:</strong> {{ savedRequest.other.details }}</p>
           </div>
@@ -326,7 +326,7 @@
         <p class="confirmation-message">
           Hemos recibido tu solicitud y nuestro equipo la está revisando. 
           Te contactaremos en un plazo de 24-48 horas para discutir los detalles 
-          y proporcionarte un presupuesto detallado.
+          y proporcionarte un presupuesto detallado. Puedes registrarte y ver tus pedidos y solicitudes en tu perfil.
         </p>
         
         <div class="confirmation-actions">
@@ -351,7 +351,7 @@ export default {
         email: '',
         phone: '',
         address: '',
-        projectType: '',
+        project_type: '',
         description: '',
         budget: '',
         timeline: '',
@@ -391,21 +391,22 @@ export default {
       requestSent: false,
       isImproving: false,
       aiSuggestions: [],
-      projectTypes: [
+      project_types: [
         { value: 'stairs', label: 'Escaleras', icon: '📶' },
         { value: 'railings', label: 'Barandillas', icon: '🚧' },
         { value: 'doors', label: 'Puertas', icon: '🚪' },
         { value: 'other', label: 'Otro proyecto', icon: '🔩' }
-      ]
+      ],
+      errorMessage: null
     };
   },
   methods: {
-    getProjectTypeLabel(value) {
-      const type = this.projectTypes.find(t => t.value === value);
+    getproject_typeLabel(value) {
+      const type = this.project_types.find(t => t.value === value);
       return type ? type.label : 'No especificado';
     },
-    selectProjectType(type) {
-      this.form.projectType = type;
+    selectproject_type(type) {
+      this.form.project_type = type;
       // Resetear campos específicos al cambiar tipo de proyecto
       this.form.stairs = { type: '', material: '', hasRailings: 'yes', railingsStyle: '' };
       this.form.railings = { location: '', material: '', style: '', height: '' };
@@ -432,7 +433,7 @@ export default {
         await new Promise(resolve => setTimeout(resolve, 1500));
         
         // Generar sugerencias basadas en el tipo de proyecto
-        if (this.form.projectType === 'stairs') {
+        if (this.form.project_type === 'stairs') {
           this.aiSuggestions = [
             `Escalera de ${this.form.stairs.material || 'metal'} para ${this.form.stairs.type || 'interior/exterior'}. ` +
             `Incluye ${this.form.stairs.hasRailings === 'yes' ? 'barandillas de estilo ' + (this.form.stairs.railingsStyle || 'moderno') : 'sin barandillas'}. ` +
@@ -445,7 +446,7 @@ export default {
             `- Requisitos adicionales: ${this.form.description || 'ninguno especificado'}`
           ];
         } 
-        else if (this.form.projectType === 'railings') {
+        else if (this.form.project_type === 'railings') {
           this.aiSuggestions = [
             `Barandilla de ${this.form.railings.material || 'metal'} para ${this.form.railings.location || 'ubicación por definir'}. ` +
             `Estilo ${this.form.railings.style || 'moderno'}, altura aproximada ${this.form.railings.height || '100'} cm. ` +
@@ -459,7 +460,7 @@ export default {
             `- Detalles adicionales: ${this.form.description || 'ninguno'}`
           ];
         }
-        else if (this.form.projectType === 'doors') {
+        else if (this.form.project_type === 'doors') {
           this.aiSuggestions = [
             `Puerta de ${this.form.doors.material || 'metal'} para ${this.form.doors.type || 'uso por definir'}. ` +
             `Estilo ${this.form.doors.style || 'moderno'}, dimensiones ${this.form.doors.dimensions || 'estándar'}. ` +
@@ -500,19 +501,62 @@ export default {
       this.form.description = suggestion;
       this.aiSuggestions = [];
     },
-    submitRequest() {
+
+    
+    async submitRequest() {
       // Validación básica
-      if (!this.form.projectType) {
+      if (!this.form.project_type) {
         alert('Por favor selecciona el tipo de proyecto');
         return;
       }
+      this.errorMessage = null;
+      this.isSubmitting = true;
       
-      // Guardar una copia de la solicitud para mostrar en la confirmación
-      this.savedRequest = JSON.parse(JSON.stringify(this.form));
-      this.requestSent = true;
+      // Preparar FormData para enviar archivos
+      const formData = new FormData();
       
-      // Aquí iría la lógica real para enviar los datos al backend
-      console.log('Solicitud enviada:', this.savedRequest);
+      // Datos básicos
+      formData.append('name', this.form.name);
+      formData.append('email', this.form.email);
+      formData.append('phone', this.form.phone);
+      formData.append('address', this.form.address);
+      formData.append('project_type', this.form.project_type);
+      formData.append('description', this.form.description);
+      formData.append('budget', this.form.budget);
+      formData.append('timeline', this.form.timeline);
+      
+      // Agregar detalles específicos del tipo de proyecto
+      formData.append(this.form.project_type, JSON.stringify(this.form[this.form.project_type]));
+      
+      // Agregar archivos
+      this.form.files.forEach((file, index) => {
+        formData.append(`files[${index}]`, file);
+      });
+      
+      try {
+        const response = await fetch('http://localhost:8000/api/project-requests', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          },
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Error en el envío de la solicitud');
+        }
+        
+        this.savedRequest = JSON.parse(JSON.stringify(this.form));
+        this.requestSent = true;
+        console.log('Solicitud enviada:', this.savedRequest);
+      } catch (error) {
+        this.errorMessage = error.message;
+      }finally {
+        this.isSubmitting = false;
+      }
+
     },
     resetForm() {
       this.form = { 
@@ -520,7 +564,7 @@ export default {
         email: '', 
         phone: '', 
         address: '',
-        projectType: '',
+        project_type: '',
         description: '',
         budget: '',
         timeline: '',

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { getUserProfile, getUserOrdersAndRequests } from '@/comunication_manager';
 
 export const useAuthStore = defineStore('auth', () => {
-  // Estado de autenticación (tu estructura actual)
+  // Estado de autenticación
   const loginInfo = reactive({
     loggedIn: false,
     username: '',
@@ -11,38 +11,51 @@ export const useAuthStore = defineStore('auth', () => {
     token: '',
   });
 
-  // Nuevo estado para datos de perfil y pedidos
+  // Estado mejorado para datos de perfil
   const profileData = reactive({
     userDetails: null,
     orders: [],
     projectRequests: [],
     isLoading: false,
-    error: null
+    error: null,
+    lastFetch: null
   });
 
-  // Métodos existentes (sin cambios)
+  // Métodos de autenticación
   const setLoginInfo = ({ loggedIn, username, email, token }) => {
     loginInfo.loggedIn = loggedIn;
     loginInfo.username = username;
     loginInfo.email = email;
     loginInfo.token = token;
+    
+    // Limpiar datos antiguos al cambiar de usuario
+    if (!loggedIn) {
+      resetProfileData();
+    }
+  };
+
+  const resetProfileData = () => {
+    profileData.userDetails = null;
+    profileData.orders = [];
+    profileData.projectRequests = [];
+    profileData.error = null;
   };
 
   const logout = () => {
     setLoginInfo({ loggedIn: false, username: '', email: '', token: '' });
-    // Limpiar también los datos del perfil
-    profileData.userDetails = null;
-    profileData.orders = [];
-    profileData.projectRequests = [];
+    resetProfileData();
   };
 
-  // Nuevos métodos para manejar datos del perfil
+  // Métodos para cargar datos
   const fetchUserProfile = async () => {
     try {
       profileData.isLoading = true;
       profileData.error = null;
       const response = await getUserProfile();
-      profileData.userDetails = response;
+      profileData.userDetails = {
+        ...response,
+        created_at: response.created_at || new Date().toISOString()
+      };
       return response;
     } catch (error) {
       profileData.error = 'Error al cargar el perfil';
@@ -55,43 +68,82 @@ export const useAuthStore = defineStore('auth', () => {
   const fetchUserOrdersAndRequests = async () => {
     try {
       profileData.isLoading = true;
-      profileData.error = null;
       const response = await getUserOrdersAndRequests();
-      profileData.orders = response.orders || [];
-      profileData.projectRequests = response.projectRequests || [];
+      
+      // Procesar pedidos
+      profileData.orders = (response.orders || []).map(order => ({
+        ...order,
+        created_at: order.created_at || new Date().toISOString(),
+        status: order.status || 'pending',
+        items: order.items || [],
+        total: order.total || 0
+      }));
+      
+      // Procesar proyectos (adaptado a tu estructura)
+      profileData.projectRequests = (response.projectRequests || []).map(project => ({
+        id: project.id,
+        project_type: project.project_type || 'other',
+        description: project.description || '',
+        files: project.files || [],
+        status: project.status || 'pending',
+        created_at: project.created_at || new Date().toISOString(),
+        updated_at: project.updated_at || new Date().toISOString(),
+        budget: project.budget || '',
+        timeline: project.timeline || '',
+        notes: project.notes || '',
+        // Detalles específicos
+        stairs_details: project.stairs_details || null,
+        railings_details: project.railings_details || null,
+        doors_details: project.doors_details || null,
+        other_details: project.other_details || null
+      }));
+      
       return response;
     } catch (error) {
-      profileData.error = 'Error al cargar pedidos y solicitudes';
+      profileData.error = 'Error al cargar pedidos y proyectos';
+      throw error;
+    } finally {
+      profileData.isLoading = false;
+      profileData.lastFetch = new Date().toISOString();
+    }
+  };
+
+  const fetchAllProfileData = async () => {
+    if (!loginInfo.loggedIn) return;
+    
+    try {
+      profileData.isLoading = true;
+      await Promise.all([
+        fetchUserProfile(),
+        fetchUserOrdersAndRequests()
+      ]);
+    } catch (error) {
+      console.error('Error loading profile data:', error);
       throw error;
     } finally {
       profileData.isLoading = false;
     }
   };
 
-  const fetchAllProfileData = async () => {
-    await Promise.all([
-      fetchUserProfile(),
-      fetchUserOrdersAndRequests()
-    ]);
-  };
-
-  // Getters existentes (sin cambios)
+  // Getters optimizados para ProfileView.vue
   const getLoginInfo = computed(() => readonly(loginInfo));
-
-  // Nuevos getters para datos del perfil
-  const getUserProfileData = computed(() => readonly(profileData.userDetails));
-  const getUserOrders = computed(() => readonly(profileData.orders));
-  const getUserProjectRequests = computed(() => readonly(profileData.projectRequests));
+  const getUserProfileData = computed(() => profileData.userDetails);
+  const getUserOrders = computed(() => profileData.orders);
+  const getUserProjectRequests = computed(() => profileData.projectRequests);
   const getProfileLoadingState = computed(() => profileData.isLoading);
   const getProfileError = computed(() => profileData.error);
+  const shouldRefreshData = computed(() => {
+    if (!profileData.lastFetch) return true;
+    return (new Date() - new Date(profileData.lastFetch)) > (5 * 60 * 1000); // 5 minutos
+  });
 
   return {
-    // Métodos y getters existentes
+    // Autenticación
     getLoginInfo,
     setLoginInfo,
     logout,
     
-    // Nuevos métodos y getters
+    // Datos de perfil
     fetchUserProfile,
     fetchUserOrdersAndRequests,
     fetchAllProfileData,
@@ -99,12 +151,12 @@ export const useAuthStore = defineStore('auth', () => {
     getUserOrders,
     getUserProjectRequests,
     getProfileLoadingState,
-    getProfileError
+    getProfileError,
+    shouldRefreshData
   };
 }, {
   persist: {
     key: 'auth',
-    paths: ['loginInfo'], // Solo persiste la info de login
-    // No persistimos profileData porque son datos temporales
+    paths: ['loginInfo'],
   }
 });

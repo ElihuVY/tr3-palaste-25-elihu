@@ -60,7 +60,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore.js';
 import { useRouter } from 'vue-router';
-import { login } from '@/comunication_manager'; // Asegúrate de que la ruta sea correcta
+import { login } from '@/comunication_manager'; 
 
 const authStore = useAuthStore();
 const router = useRouter();

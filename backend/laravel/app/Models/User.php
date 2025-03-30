@@ -22,4 +22,14 @@ class User extends Authenticatable
         'remember_token', 
     ];
     
+    public function pedidos()
+{
+    return $this->hasMany(Pedido::class);
+}
+
+public function projectRequests()
+{
+    return $this->hasMany(ProjectRequest::class);
+}
+    
 }
