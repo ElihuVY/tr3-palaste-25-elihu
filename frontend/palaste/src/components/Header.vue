@@ -20,7 +20,6 @@ async function salir() {
   router.push('/home'); 
 }
 
-// Actualizar el estado de visibilidad
 visibleLog.value = isLoggedIn.value;
 </script>
 

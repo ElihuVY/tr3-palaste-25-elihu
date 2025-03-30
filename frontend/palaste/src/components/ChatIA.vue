@@ -342,7 +342,9 @@
   </div>
 </template>
 
-<script>
+<script scoped>
+      import { laravel } from '@/comunication_manager' 
+
 export default {
   data() {
     return {
@@ -532,9 +534,8 @@ export default {
       this.form.files.forEach((file, index) => {
         formData.append(`files[${index}]`, file);
       });
-      
       try {
-        const response = await fetch('http://localhost:8000/api/project-requests', {
+        const response = await fetch(`${laravel}/project-requests`, {
           method: 'POST',
           body: formData,
           headers: {

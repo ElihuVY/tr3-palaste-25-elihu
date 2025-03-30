@@ -63,13 +63,11 @@ const submitOrder = async () => {
   errorMessage.value = '';
 
   try {
-    // Verificar token primero
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Debes iniciar sesión para realizar un pedido');
     }
 
-    // Verificar conexión con el servidor
     let user;
     try {
       user = await getCurrentUser();

@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { laravel } from '@/comunication_manager' 
 
-
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 // Datos reactivos
 const userProfile = ref(null);
@@ -12,7 +11,7 @@ const userProjects = ref([]);
 const activeTab = ref('profile');
 const isLoading = ref(false);
 const error = ref(null);
-const selectedProject = ref(null); // Nuevo: proyecto seleccionado para ver detalles
+const selectedProject = ref(null); 
 const showProjectDetails = ref(false);
 
 const viewProjectDetails = (project) => {
@@ -28,7 +27,7 @@ const fetchProfileData = async () => {
 
   try {
     // 1. Obtener perfil del usuario
-    const profileResponse = await fetch(`${API_BASE_URL}/user/profile`, {
+    const profileResponse = await fetch(`${laravel}/user/profile`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
@@ -40,7 +39,7 @@ const fetchProfileData = async () => {
     userEmail.value = userProfile.value.email;
 
     // 2. Obtener pedidos y proyectos
-    const projectsResponse = await fetch(`${API_BASE_URL}/perfil/datos`, {
+    const projectsResponse = await fetch(`${laravel}/perfil/datos`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
@@ -49,7 +48,6 @@ const fetchProfileData = async () => {
 
     if (!projectsResponse.ok) throw new Error('Error al cargar pedidos/proyectos');
 
-    // Ajusta según la estructura real de tu API
     const { pedidos, peticiones } = await projectsResponse.json();
     userOrders.value = pedidos || [];
     userProjects.value = peticiones || [];
@@ -61,7 +59,6 @@ const fetchProfileData = async () => {
     isLoading.value = false;
   }
 };
-// Función para estilos de estado (igual que tu versión original)
 const getStatusConfig = (status) => {
   const configs = {
     pending: {
@@ -96,13 +93,11 @@ const getStatusConfig = (status) => {
   return configs[status] || { class: 'bg-gray-100 text-gray-800 border-gray-200', text: status };
 };
 
-// Formatear fecha (igual que tu versión original)
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-// Formatear moneda (igual que tu versión original)
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
@@ -110,19 +105,16 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 
-// Cargar datos al montar el componente
 onMounted(fetchProfileData);
 </script>
 
 <template>
   <div class="container mx-auto px-4 py-8">
-    <!-- Loading State (igual que tu versión) -->
     <div v-if="isLoading" class="flex justify-center items-center min-h-[400px]">
       <div class="animate-spin rounded-full h-12 w-12 border-4 border-slate-400 border-t-transparent"></div>
       <span class="ml-3 text-slate-600">Cargando tu perfil...</span>
     </div>
 
-    <!-- Error State (igual que tu versión) -->
     <div v-else-if="error" class="text-center p-8">
       <div class="max-w-md mx-auto bg-rose-50 rounded-lg p-6 border border-rose-200">
         <div class="flex flex-col items-center">
@@ -140,7 +132,6 @@ onMounted(fetchProfileData);
       </div>
     </div>
 
-    <!-- Content (EXACTAMENTE IGUAL que tu versión original) -->
     <div v-else class="max-w-6xl mx-auto">
       <!-- Profile Header -->
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
@@ -169,7 +160,6 @@ onMounted(fetchProfileData);
         </div>
       </div>
 
-      <!-- Navigation Tabs (igual que tu versión) -->
       <div class="flex overflow-x-auto mb-8 border-b border-slate-200">
         <button v-for="tab in [
           { id: 'orders', name: 'Mis Pedidos' },
@@ -192,12 +182,9 @@ onMounted(fetchProfileData);
         </button>
       </div>
 
-      <!-- Tab Content (EXACTAMENTE IGUAL que tu versión) -->
       <div>
-        <!-- Profile Tab -->
         <div v-if="activeTab === 'profile'"
           class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <!-- ... (todo el contenido igual) ... -->
         </div>
 
 
@@ -371,11 +358,11 @@ onMounted(fetchProfileData);
         </div>
       </div>
     </div>
-    <!-- Modal de detalles del proyecto - Versión completa -->
-<div v-if="showProjectDetails" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+
+    <div v-if="showProjectDetails" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
   <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
     <div class="p-6">
-      <!-- Cabecera con título y botón cerrar -->
+
       <div class="flex justify-between items-start mb-4">
         <h3 class="text-2xl font-bold text-slate-800">{{ selectedProject?.title }}</h3>
         <button @click="closeProjectDetails" class="text-slate-400 hover:text-slate-600">
@@ -385,11 +372,8 @@ onMounted(fetchProfileData);
         </button>
       </div>
 
-      <!-- Información básica -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <!-- Columna izquierda -->
         <div>
-          <!-- Estado y fechas -->
           <div class="mb-4">
             <span :class="['px-3 py-1 rounded-full text-sm font-medium border', getStatusConfig(selectedProject?.status).class]">
               {{ getStatusConfig(selectedProject?.status).text }}
@@ -400,7 +384,6 @@ onMounted(fetchProfileData);
             </div>
           </div>
 
-          <!-- Detalles específicos del proyecto -->
           <div class="space-y-3">
             <div v-if="selectedProject?.budget">
               <h4 class="text-sm font-medium text-slate-500">Presupuesto</h4>
@@ -419,9 +402,7 @@ onMounted(fetchProfileData);
           </div>
         </div>
 
-        <!-- Columna derecha -->
         <div>
-          <!-- Categorías/Etiquetas -->
           <div v-if="selectedProject?.tags?.length" class="mb-4">
             <h4 class="text-sm font-medium text-slate-500 mb-2">Etiquetas/Categorías</h4>
             <div class="flex flex-wrap gap-2">
@@ -452,13 +433,11 @@ onMounted(fetchProfileData);
         </div>
       </div>
 
-      <!-- Descripción completa -->
       <div class="mb-6">
         <h4 class="text-sm font-medium text-slate-500 mb-2">Descripción detallada</h4>
         <p class="text-slate-700 whitespace-pre-line">{{ selectedProject?.description }}</p>
       </div>
 
-      <!-- Notas del administrador -->
       <div v-if="selectedProject?.notes" class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 rounded-r">
         <div class="flex">
           <svg class="h-5 w-5 text-amber-400 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -471,7 +450,6 @@ onMounted(fetchProfileData);
         </div>
       </div>
 
-      <!-- Historial de actualizaciones -->
       <div v-if="selectedProject?.updates?.length" class="border-t border-slate-200 pt-4">
         <h4 class="text-sm font-medium text-slate-500 mb-3">Historial de actualizaciones</h4>
         <div class="space-y-3">

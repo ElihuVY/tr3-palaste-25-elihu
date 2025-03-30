@@ -11,7 +11,6 @@ import { ref } from 'vue';
   <div class="grid min-h-screen grid-rows-[auto_1fr] grid-cols-1">
     <Carousel/>
 
-    <!-- Contenido principal con 3 secciones -->
     <main class="grid grid-rows-3 gap-8 p-8">
       <section class="py-20 bg-white">
       <div class="container mx-auto px-4">
@@ -184,8 +183,8 @@ import { ref } from 'vue';
   @apply font-bold text-primary;
 }
 section{
-  max-height: 450px; /* Ajusta según necesites */
-  overflow-y: auto; /* Agrega scroll si el contenido es mayor a la altura */
+  max-height: 450px; 
+  overflow-y: auto; 
   padding: 20px;
   background-color: #f8f8f8;
   border-radius: 10px;

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { getUserProfile, getUserOrdersAndRequests } from '@/comunication_manager';
 
 export const useAuthStore = defineStore('auth', () => {
-  // Estado de autenticación
+
   const loginInfo = reactive({
     loggedIn: false,
     username: '',
@@ -11,7 +11,6 @@ export const useAuthStore = defineStore('auth', () => {
     token: '',
   });
 
-  // Estado mejorado para datos de perfil
   const profileData = reactive({
     userDetails: null,
     orders: [],
@@ -21,14 +20,12 @@ export const useAuthStore = defineStore('auth', () => {
     lastFetch: null
   });
 
-  // Métodos de autenticación
   const setLoginInfo = ({ loggedIn, username, email, token }) => {
     loginInfo.loggedIn = loggedIn;
     loginInfo.username = username;
     loginInfo.email = email;
     loginInfo.token = token;
     
-    // Limpiar datos antiguos al cambiar de usuario
     if (!loggedIn) {
       resetProfileData();
     }
@@ -46,7 +43,6 @@ export const useAuthStore = defineStore('auth', () => {
     resetProfileData();
   };
 
-  // Métodos para cargar datos
   const fetchUserProfile = async () => {
     try {
       profileData.isLoading = true;

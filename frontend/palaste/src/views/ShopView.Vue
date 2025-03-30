@@ -19,7 +19,6 @@ const isCartOpen = ref(false)
 
 const { cart, addToCart, totalItems } = useCart()
 
-// Cargar productos
 onMounted(async () => {
   try {
     const response = await getProducts()
@@ -175,7 +174,6 @@ const sugerirProductos = computed(() => {
         </div>
       </div>
 
-      <!-- Grid de productos -->
       <div class="col-span-3">
         <transition-group
           name="products-grid"
@@ -220,7 +218,6 @@ const sugerirProductos = computed(() => {
       </div>
     </div>
 
-    <!-- Modal de producto -->
     <ProductModal
       :product="productoSeleccionado"
       :suggested-products="sugerirProductos"
@@ -228,7 +225,6 @@ const sugerirProductos = computed(() => {
       @open-product="openProduct"
     />
 
-    <!-- Carrito -->
     <ShoppingCart
       :is-open="isCartOpen"
       @close="isCartOpen = false"
