@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { laravel } from '@/comunication_manager' 
 
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 // Datos reactivos
 const userProfile = ref(null);
@@ -27,7 +27,7 @@ const fetchProfileData = async () => {
 
   try {
     // 1. Obtener perfil del usuario
-    const profileResponse = await fetch(`${laravel}/user/profile`, {
+    const profileResponse = await fetch(`${API_BASE_URL}/user/profile`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ const fetchProfileData = async () => {
     userEmail.value = userProfile.value.email;
 
     // 2. Obtener pedidos y proyectos
-    const projectsResponse = await fetch(`${laravel}/perfil/datos`, {
+    const projectsResponse = await fetch(`${API_BASE_URL}/perfil/datos`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'

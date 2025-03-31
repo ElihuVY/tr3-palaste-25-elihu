@@ -535,7 +535,7 @@ export default {
         formData.append(`files[${index}]`, file);
       });
       try {
-        const response = await fetch(`${laravel}/project-requests`, {
+        const response = await fetch('http://localhost:8000/api/project-requests', {
           method: 'POST',
           body: formData,
           headers: {
