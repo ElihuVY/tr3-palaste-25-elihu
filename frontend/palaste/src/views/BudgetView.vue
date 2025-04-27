@@ -1,5 +1,5 @@
 <script setup>
-import ChatIA from '..ChatIA.vue';
+import ChatIA from '@/components/ChatIA.vue';
 </script>
 
 <template>

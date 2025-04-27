@@ -1,6 +1,6 @@
 export const laravel = {
   //google_npm_hoghtst_80
-    URL: "https://palaste.com/laravel/public/api"
+    URL: "https://palaste.com/api"
   };
   
   const headers = {
@@ -75,7 +75,7 @@ export const laravel = {
       throw error;
     }
   }
-  
+
   export async function submitProjectRequest(formData) {
     const URL = `${laravel.URL}/project-requests`;
     try {
