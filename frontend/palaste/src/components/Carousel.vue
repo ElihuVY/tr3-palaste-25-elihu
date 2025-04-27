@@ -165,7 +165,7 @@ const carouselStyle = computed(() => {
   will-change: transform;
 }
 
-/* Animaciones personalizadas */
+
 .animate-fade-in {
   opacity: 0;
   animation: fadeIn 0.8s ease-in-out forwards;

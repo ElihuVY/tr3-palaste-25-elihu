@@ -66,6 +66,7 @@ const isPwd = ref(true);
 const errorMessage = ref('');
 
 async function registrar() {
+  console.log("Formulario enviado");
   if (password.value !== password_confirmation.value) {
     errorMessage.value = 'Las contraseñas no coinciden.';
     return;
@@ -74,11 +75,13 @@ async function registrar() {
   try {
     authStore.cargando = true;
     const data = await register({
+      
       name: name.value,
       email: email.value,
       password: password.value,
       password_confirmation: password_confirmation.value,
     });
+    console.log("await");
 
     if (!data.errors) {
       authStore.setLoginInfo({

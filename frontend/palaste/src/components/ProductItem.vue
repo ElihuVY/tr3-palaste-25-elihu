@@ -78,7 +78,6 @@
     },
     methods: {
       addToCart() {
-        // Emitir un evento para añadir el producto al carrito
         this.$emit('add-to-cart', this.product);
       },
     },
@@ -86,5 +85,4 @@
   </script>
   
   <style scoped>
-  /* Estilos específicos del componente */
   </style>

@@ -4,7 +4,7 @@
     <h2 class="title">Solicitud de Proyecto de Soldadura</h2>
     
     <form @submit.prevent="submitRequest" v-if="!requestSent" class="request-form">
-      <!-- Información básica del cliente -->
+      <!-- aqui se añadira la info básica del cliente -->
       <div class="client-info-section">
         <h3 class="section-title">📋 Información del Cliente</h3>
         <div class="form-row">
@@ -32,7 +32,7 @@
         </div>
       </div>
       
-      <!-- Selección de tipo de proyecto -->
+      <!-- el usuario seleccionara el tipo de proyecto -->
       <div class="project-type-section">
         <h3 class="section-title">🔧 Tipo de Proyecto</h3>
         <div class="project-type-options">
@@ -47,11 +47,11 @@
         </div>
       </div>
       
-      <!-- Opciones específicas según tipo de proyecto -->
+      <!-- opciones específicas según el tipo de proyecto -->
       <div v-if="form.project_type" class="specific-options-section">
         <h3 class="section-title">⚙️ Detalles del Proyecto</h3>
         
-        <!-- Opciones para escaleras -->
+        <!-- opciones para las escaleras -->
         <div v-if="form.project_type === 'stairs'" class="options-group">
           <div class="form-row">
             <div class="form-group">
@@ -101,7 +101,7 @@
           </div>
         </div>
         
-        <!-- Opciones para barandillas -->
+        <!-- opciones para las barandillas -->
         <div v-if="form.project_type === 'railings'" class="options-group">
           <div class="form-row">
             <div class="form-group">
@@ -146,7 +146,7 @@
           </div>
         </div>
         
-        <!-- Opciones para puertas -->
+        <!-- opciones para puertas -->
         <div v-if="form.project_type === 'doors'" class="options-group">
           <div class="form-row">
             <div class="form-group">
@@ -191,7 +191,7 @@
           </div>
         </div>
         
-        <!-- Opciones para otros proyectos -->
+        <!-- añadi la opcion de OTROS, por si no coincidian con las demas -->
         <div v-if="form.project_type === 'other'" class="options-group">
           <div class="form-group">
             <label for="other-type">¿Qué necesitas?</label>
@@ -212,7 +212,7 @@
         </div>
       </div>
       
-      <!-- Descripción del proyecto con IA -->
+      <!-- Aqui permito al usuario hacer un prompt del proyecto y mejorarlo con "IA" -->
       <div class="description-section">
         <h3 class="section-title">📝 Descripción del Proyecto</h3>
         
@@ -278,7 +278,7 @@
       </div>
     </form>
     
-    <!-- Pantalla de confirmación -->
+    <!-- `pantalla de confirmación de la peticion -->
     <div v-else class="confirmation-screen">
       <div class="confirmation-content">
         <div class="success-icon">✅</div>
@@ -291,7 +291,7 @@
           <p><strong>Contacto:</strong> {{ savedRequest.phone }} | {{ savedRequest.email }}</p>
           <p v-if="savedRequest.address"><strong>Dirección:</strong> {{ savedRequest.address }}</p>
           
-          <!-- Mostrar detalles específicos según el tipo de proyecto -->
+          <!-- los detalles específicos según el tipo de proyecto -->
           <div v-if="savedRequest.project_type === 'stairs'">
             <p><strong>Tipo de escalera:</strong> {{ savedRequest.stairs.type || 'No especificado' }}</p>
             <p><strong>Material:</strong> {{ savedRequest.stairs.material || 'No especificado' }}</p>
@@ -343,7 +343,7 @@
 </template>
 
 <script scoped>
-      import { laravel } from '@/comunication_manager' 
+import { submitProjectRequest } from '@/comunication_manager';
 
 export default {
   data() {
@@ -358,36 +358,10 @@ export default {
         budget: '',
         timeline: '',
         files: [],
-        
-        // Opciones específicas para escaleras
-        stairs: {
-          type: '',
-          material: '',
-          hasRailings: 'yes',
-          railingsStyle: ''
-        },
-        
-        // Opciones específicas para barandillas
-        railings: {
-          location: '',
-          material: '',
-          style: '',
-          height: ''
-        },
-        
-        // Opciones específicas para puertas
-        doors: {
-          type: '',
-          material: '',
-          style: '',
-          dimensions: ''
-        },
-        
-        // Opciones para otros proyectos
-        other: {
-          type: '',
-          details: ''
-        }
+        stairs: { type: '', material: '', hasRailings: 'yes', railingsStyle: '' },
+        railings: { location: '', material: '', style: '', height: '' },
+        doors: { type: '', material: '', style: '', dimensions: '' },
+        other: { type: '', details: '' }
       },
       savedRequest: {},
       requestSent: false,
@@ -409,7 +383,6 @@ export default {
     },
     selectproject_type(type) {
       this.form.project_type = type;
-      // Resetear campos específicos al cambiar tipo de proyecto
       this.form.stairs = { type: '', material: '', hasRailings: 'yes', railingsStyle: '' };
       this.form.railings = { location: '', material: '', style: '', height: '' };
       this.form.doors = { type: '', material: '', style: '', dimensions: '' };
@@ -426,34 +399,30 @@ export default {
         alert('Por favor escribe una descripción inicial para que la IA pueda mejorarla');
         return;
       }
-      
+
       this.isImproving = true;
       this.aiSuggestions = [];
-      
+
       try {
-        // Simulación de llamada a IA con diferentes sugerencias
+        // Simulación de generación de sugerencias con IA
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Generar sugerencias basadas en el tipo de proyecto
+
         if (this.form.project_type === 'stairs') {
           this.aiSuggestions = [
             `Escalera de ${this.form.stairs.material || 'metal'} para ${this.form.stairs.type || 'interior/exterior'}. ` +
             `Incluye ${this.form.stairs.hasRailings === 'yes' ? 'barandillas de estilo ' + (this.form.stairs.railingsStyle || 'moderno') : 'sin barandillas'}. ` +
             `Necesito un diseño ${this.form.stairs.type === 'caracol' ? 'espiral que optimice el espacio' : 'funcional y resistente'}.`,
-            
             `Proyecto de escalera metálica con las siguientes características:\n` +
             `- Tipo: ${this.form.stairs.type || 'por definir'}\n` +
             `- Material principal: ${this.form.stairs.material || 'acero/inoxidable'}\n` +
             `- Barandillas: ${this.form.stairs.hasRailings === 'yes' ? 'Sí, estilo ' + (this.form.stairs.railingsStyle || 'a elegir') : 'No'}\n` +
             `- Requisitos adicionales: ${this.form.description || 'ninguno especificado'}`
           ];
-        } 
-        else if (this.form.project_type === 'railings') {
+        } else if (this.form.project_type === 'railings') {
           this.aiSuggestions = [
             `Barandilla de ${this.form.railings.material || 'metal'} para ${this.form.railings.location || 'ubicación por definir'}. ` +
             `Estilo ${this.form.railings.style || 'moderno'}, altura aproximada ${this.form.railings.height || '100'} cm. ` +
             `Necesito que sea ${this.form.railings.location === 'pool' ? 'resistente a la humedad y con diseño seguro' : 'estética y funcional'}.`,
-            
             `Especificaciones para barandilla:\n` +
             `- Ubicación: ${this.form.railings.location || 'por determinar'}\n` +
             `- Material: ${this.form.railings.material || 'acero/inoxidable'}\n` +
@@ -461,13 +430,11 @@ export default {
             `- Altura: ${this.form.railings.height || '100'} cm\n` +
             `- Detalles adicionales: ${this.form.description || 'ninguno'}`
           ];
-        }
-        else if (this.form.project_type === 'doors') {
+        } else if (this.form.project_type === 'doors') {
           this.aiSuggestions = [
             `Puerta de ${this.form.doors.material || 'metal'} para ${this.form.doors.type || 'uso por definir'}. ` +
             `Estilo ${this.form.doors.style || 'moderno'}, dimensiones ${this.form.doors.dimensions || 'estándar'}. ` +
             `Requisitos: ${this.form.doors.type === 'security' ? 'alta seguridad y resistencia' : 'diseño atractivo y funcionalidad'}.`,
-            
             `Detalles para puerta metálica:\n` +
             `- Tipo: ${this.form.doors.type || 'exterior/interior'}\n` +
             `- Material: ${this.form.doors.material || 'acero/hierro'}\n` +
@@ -475,14 +442,11 @@ export default {
             `- Dimensiones: ${this.form.doors.dimensions || 'por determinar'}\n` +
             `- Consideraciones especiales: ${this.form.description || 'ninguna'}`
           ];
-        }
-        else {
-          // Sugerencias genéricas para otros proyectos
+        } else {
           this.aiSuggestions = [
             `Proyecto de soldadura personalizado. Tipo: ${this.form.other.type || 'estructura/mueble/arte'}. ` +
             `Detalles: ${this.form.other.details || 'por especificar'}. ` +
             `Requisitos técnicos: ${this.form.description || 'ninguno indicado'}.`,
-            
             `Descripción detallada del proyecto:\n` +
             `- Tipo: ${this.form.other.type || 'personalizado'}\n` +
             `- Materiales preferidos: ${this.form.description.includes('material') ? '' : 'por determinar'}\n` +
@@ -491,7 +455,6 @@ export default {
             `- Detalles adicionales: ${this.form.description || 'ninguno'}`
           ];
         }
-        
       } catch (error) {
         console.error('Error al mejorar la descripción:', error);
         alert('Ocurrió un error al generar sugerencias. Por favor inténtalo de nuevo.');
@@ -503,21 +466,15 @@ export default {
       this.form.description = suggestion;
       this.aiSuggestions = [];
     },
-
-    
     async submitRequest() {
-      // Validación básica
       if (!this.form.project_type) {
         alert('Por favor selecciona el tipo de proyecto');
         return;
       }
       this.errorMessage = null;
       this.isSubmitting = true;
-      
-      // Preparar FormData para enviar archivos
+
       const formData = new FormData();
-      
-      // Datos básicos
       formData.append('name', this.form.name);
       formData.append('email', this.form.email);
       formData.append('phone', this.form.phone);
@@ -526,44 +483,27 @@ export default {
       formData.append('description', this.form.description);
       formData.append('budget', this.form.budget);
       formData.append('timeline', this.form.timeline);
-      
-      // Agregar detalles específicos del tipo de proyecto
       formData.append(this.form.project_type, JSON.stringify(this.form[this.form.project_type]));
-      
-      // Agregar archivos
       this.form.files.forEach((file, index) => {
         formData.append(`files[${index}]`, file);
       });
+
       try {
-        const response = await fetch('https://palaste/laravel/api/project-requests', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          },
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Error en el envío de la solicitud');
-        }
-        
+        const data = await submitProjectRequest(formData);
         this.savedRequest = JSON.parse(JSON.stringify(this.form));
         this.requestSent = true;
         console.log('Solicitud enviada:', this.savedRequest);
       } catch (error) {
         this.errorMessage = error.message;
-      }finally {
+      } finally {
         this.isSubmitting = false;
       }
-
     },
     resetForm() {
-      this.form = { 
-        name: '', 
-        email: '', 
-        phone: '', 
+      this.form = {
+        name: '',
+        email: '',
+        phone: '',
         address: '',
         project_type: '',
         description: '',
@@ -579,7 +519,6 @@ export default {
       this.aiSuggestions = [];
     },
     downloadSummary() {
-      // Simulación de descarga de resumen
       alert('Funcionalidad de descarga activada (simulación)');
     }
   }

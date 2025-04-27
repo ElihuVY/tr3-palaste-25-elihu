@@ -35,7 +35,7 @@ class ProjectRequestController extends Controller
             ], 422);
         }
 
-        // Procesar archivos
+        // procesar archivos
         $filesPaths = [];
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
@@ -44,13 +44,13 @@ class ProjectRequestController extends Controller
             }
         }
 
-        // Decodificar detalles específicos
+        // decodificar detalles específicos
         $details = [];
         if ($request->has($request->project_type)) {
             $details = json_decode($request->input($request->project_type), true);
         }
 
-        // Crear solicitud de proyecto
+        // crear solicitud de proyecto
         $projectRequest = ProjectRequest::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -74,6 +74,7 @@ class ProjectRequestController extends Controller
 
     public function getProjectTypes()
     {
+        //peticion donde pudo añadir tipos de proyecto o quitar
         return response()->json([
             'project_types' => [
                 ['value' => 'stairs', 'label' => 'Escaleras', 'icon' => '📶'],

@@ -1,5 +1,5 @@
 <script setup>
-import ChatIA from '@/components/chatIA.vue';
+import ChatIA from '..ChatIA.vue';
 </script>
 
 <template>
@@ -73,7 +73,7 @@ import ChatIA from '@/components/chatIA.vue';
 </template>
 
 <style scoped>
-/* Animación sutil para la tarjeta del chat */
+/* Animación para la tarjeta del chat */
 .bg-white {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

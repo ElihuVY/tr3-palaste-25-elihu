@@ -1,5 +1,6 @@
 export const laravel = {
-    URL: "https://palaste.com/laravel/api"
+  //google_npm_hoghtst_80
+    URL: "https://palaste.com/laravel/public/api"
   };
   
   const headers = {
@@ -71,6 +72,29 @@ export const laravel = {
       return await response.json();
     } catch (error) {
       console.error('Logout error:', error);
+      throw error;
+    }
+  }
+  
+  export async function submitProjectRequest(formData) {
+    const URL = `${laravel.URL}/project-requests`;
+    try {
+      const response = await fetch(URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error en el envío de la solicitud');
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error('Error al enviar la solicitud de proyecto:', error);
       throw error;
     }
   }
