@@ -5,7 +5,7 @@ import tailwind from 'tailwindcss'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/',
+  base: './',
   css: {
     postcss: {
       plugins: [tailwind(), autoprefixer()],

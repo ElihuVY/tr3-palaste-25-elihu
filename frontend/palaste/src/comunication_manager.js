@@ -1,6 +1,6 @@
 export const laravel = {
   //google_npm_hoghtst_80
-    URL: "https://palaste.com/api"
+    URL: "https://palaste.com/api/api"
   };
   
   const headers = {

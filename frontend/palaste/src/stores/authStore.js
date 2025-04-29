@@ -21,8 +21,12 @@ export const useAuthStore = defineStore('auth', () => {
     setLoginInfo({ loggedIn: false, username: '', email: '', token: '' });
   };
 
+  const getLoginInfo = computed(() => loginInfo);
+
+  
   return {
     // Autenticación
+    getLoginInfo,
     loginInfo,
     setLoginInfo,
     logout,

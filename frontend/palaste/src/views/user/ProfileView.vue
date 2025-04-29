@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const API_BASE_URL = 'https://palaste/laravel/api';
+const API_BASE_URL = 'https://palaste/api/api';
 
 // Datos reactivos
 const userProfile = ref(null);
