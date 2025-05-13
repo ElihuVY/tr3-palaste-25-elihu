@@ -1,40 +1,39 @@
 <template>
-  
   <div class="project-request-container">
-    <h2 class="title">Solicitud de Proyecto de Soldadura</h2>
+    <h2 class="title">Demande de Projet de Soudure</h2>
     
     <form @submit.prevent="submitRequest" v-if="!requestSent" class="request-form">
-      <!-- aqui se añadira la info básica del cliente -->
+      <!-- Section d'informations client -->
       <div class="client-info-section">
-        <h3 class="section-title">📋 Información del Cliente</h3>
+        <h3 class="section-title">📋 Informations du Client</h3>
         <div class="form-row">
           <div class="form-group">
-            <label for="name">Nombre completo:</label>
+            <label for="name">Nom complet:</label>
             <input type="text" id="name" v-model="form.name" required class="form-input">
           </div>
           
           <div class="form-group">
-            <label for="phone">Teléfono:</label>
+            <label for="phone">Téléphone:</label>
             <input type="tel" id="phone" v-model="form.phone" required class="form-input" placeholder="+34 123 456 789">
           </div>
         </div>
         
         <div class="form-row">
           <div class="form-group">
-            <label for="email">Correo electrónico:</label>
+            <label for="email">Courriel:</label>
             <input type="email" id="email" v-model="form.email" required class="form-input">
           </div>
           
           <div class="form-group">
-            <label for="address">Dirección (opcional):</label>
-            <input type="text" id="address" v-model="form.address" class="form-input" placeholder="Calle, número, ciudad, código postal">
+            <label for="address">Adresse (facultatif):</label>
+            <input type="text" id="address" v-model="form.address" class="form-input" placeholder="Rue, numéro, ville, code postal">
           </div>
         </div>
       </div>
       
-      <!-- el usuario seleccionara el tipo de proyecto -->
+      <!-- Sélection du type de projet -->
       <div class="project-type-section">
-        <h3 class="section-title">🔧 Tipo de Proyecto</h3>
+        <h3 class="section-title">🔧 Type de Projet</h3>
         <div class="project-type-options">
           <button type="button" 
                   v-for="type in project_types" 
@@ -47,202 +46,202 @@
         </div>
       </div>
       
-      <!-- opciones específicas según el tipo de proyecto -->
+      <!-- Options spécifiques selon le type de projet -->
       <div v-if="form.project_type" class="specific-options-section">
-        <h3 class="section-title">⚙️ Detalles del Proyecto</h3>
+        <h3 class="section-title">⚙️ Détails du Projet</h3>
         
-        <!-- opciones para las escaleras -->
+        <!-- Options pour les escaliers -->
         <div v-if="form.project_type === 'stairs'" class="options-group">
           <div class="form-row">
             <div class="form-group">
-              <label for="stairs-type">Tipo de escalera:</label>
+              <label for="stairs-type">Type d'escalier:</label>
               <select id="stairs-type" v-model="form.stairs.type" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="interior">Interior</option>
-                <option value="exterior">Exterior</option>
-                <option value="industrial">Industrial</option>
-                <option value="caracol">De caracol</option>
-                <option value="recta">Recta</option>
+                <option value="">Sélectionnez...</option>
+                <option value="interior">Intérieur</option>
+                <option value="exterior">Extérieur</option>
+                <option value="industrial">Industriel</option>
+                <option value="caracol">En colimaçon</option>
+                <option value="recta">Droit</option>
               </select>
             </div>
             
             <div class="form-group">
-              <label for="stairs-material">Material principal:</label>
+              <label for="stairs-material">Matériau principal:</label>
               <select id="stairs-material" v-model="form.stairs.material" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="acero">Acero</option>
-                <option value="inoxidable">Acero inoxidable</option>
-                <option value="hierro">Hierro forjado</option>
-                <option value="mixta">Mixta (madera/metal)</option>
+                <option value="">Sélectionnez...</option>
+                <option value="acero">Acier</option>
+                <option value="inoxidable">Acier inoxydable</option>
+                <option value="hierro">Fer forgé</option>
+                <option value="mixta">Mixte (bois/métal)</option>
               </select>
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group">
-              <label for="stairs-railings">¿Incluye barandillas?</label>
+              <label for="stairs-railings">Inclure des rampes?</label>
               <select id="stairs-railings" v-model="form.stairs.hasRailings" class="form-select">
-                <option value="yes">Sí</option>
-                <option value="no">No</option>
-                <option value="unsure">No estoy seguro</option>
+                <option value="yes">Oui</option>
+                <option value="no">Non</option>
+                <option value="unsure">Je ne suis pas sûr</option>
               </select>
             </div>
             
             <div v-if="form.stairs.hasRailings === 'yes'" class="form-group">
-              <label for="railings-style">Estilo de barandillas:</label>
+              <label for="railings-style">Style de rampes:</label>
               <select id="railings-style" v-model="form.stairs.railingsStyle" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="modern">Moderno (líneas rectas)</option>
-                <option value="classic">Clásico (diseños ornamentados)</option>
-                <option value="industrial">Industrial (tuberías visibles)</option>
-                <option value="minimalist">Minimalista (vidrio/acero)</option>
+                <option value="">Sélectionnez...</option>
+                <option value="modern">Moderne (lignes droites)</option>
+                <option value="classic">Classique (motifs ornementaux)</option>
+                <option value="industrial">Industriel (tuyaux apparents)</option>
+                <option value="minimalist">Minimaliste (verre/acier)</option>
               </select>
             </div>
           </div>
         </div>
         
-        <!-- opciones para las barandillas -->
+        <!-- Options pour les rampes -->
         <div v-if="form.project_type === 'railings'" class="options-group">
           <div class="form-row">
             <div class="form-group">
-              <label for="railings-location">Ubicación:</label>
+              <label for="railings-location">Emplacement:</label>
               <select id="railings-location" v-model="form.railings.location" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="balcony">Balcón</option>
-                <option value="terrace">Terraza</option>
-                <option value="staircase">Escalera</option>
-                <option value="window">Protección de ventana</option>
-                <option value="pool">Alrededor de piscina</option>
+                <option value="">Sélectionnez...</option>
+                <option value="balcony">Balcon</option>
+                <option value="terrace">Terrasse</option>
+                <option value="staircase">Escalier</option>
+                <option value="window">Protection de fenêtre</option>
+                <option value="pool">Autour de la piscine</option>
               </select>
             </div>
             
             <div class="form-group">
-              <label for="railings-material">Material:</label>
+              <label for="railings-material">Matériau:</label>
               <select id="railings-material" v-model="form.railings.material" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="acero">Acero</option>
-                <option value="inoxidable">Acero inoxidable</option>
-                <option value="hierro">Hierro forjado</option>
-                <option value="aluminio">Aluminio</option>
+                <option value="">Sélectionnez...</option>
+                <option value="acero">Acier</option>
+                <option value="inoxidable">Acier inoxydable</option>
+                <option value="hierro">Fer forgé</option>
+                <option value="aluminio">Aluminium</option>
               </select>
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group">
-              <label for="railings-style">Estilo:</label>
+              <label for="railings-style">Style:</label>
               <select id="railings-style" v-model="form.railings.style" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="modern">Moderno</option>
-                <option value="classic">Clásico</option>
-                <option value="custom">Diseño personalizado</option>
+                <option value="">Sélectionnez...</option>
+                <option value="modern">Moderne</option>
+                <option value="classic">Classique</option>
+                <option value="custom">Design personnalisé</option>
               </select>
             </div>
             
             <div class="form-group">
-              <label for="railings-height">Altura aproximada (cm):</label>
-              <input type="number" id="railings-height" v-model="form.railings.height" class="form-input" placeholder="Ej: 100">
+              <label for="railings-height">Hauteur approximative (cm):</label>
+              <input type="number" id="railings-height" v-model="form.railings.height" class="form-input" placeholder="Ex: 100">
             </div>
           </div>
         </div>
         
-        <!-- opciones para puertas -->
+        <!-- Options pour les portes -->
         <div v-if="form.project_type === 'doors'" class="options-group">
           <div class="form-row">
             <div class="form-group">
-              <label for="door-type">Tipo de puerta:</label>
+              <label for="door-type">Type de porte:</label>
               <select id="door-type" v-model="form.doors.type" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="exterior">Puerta exterior</option>
-                <option value="interior">Puerta interior</option>
-                <option value="garage">Puerta de garaje</option>
-                <option value="security">Puerta de seguridad</option>
-                <option value="sliding">Corredera</option>
+                <option value="">Sélectionnez...</option>
+                <option value="exterior">Porte extérieure</option>
+                <option value="interior">Porte intérieure</option>
+                <option value="garage">Porte de garage</option>
+                <option value="security">Porte de sécurité</option>
+                <option value="sliding">Coulissante</option>
               </select>
             </div>
             
             <div class="form-group">
-              <label for="door-material">Material:</label>
+              <label for="door-material">Matériau:</label>
               <select id="door-material" v-model="form.doors.material" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="acero">Acero</option>
-                <option value="hierro">Hierro</option>
-                <option value="mixta">Mixta (madera/metal)</option>
+                <option value="">Sélectionnez...</option>
+                <option value="acero">Acier</option>
+                <option value="hierro">Fer</option>
+                <option value="mixta">Mixte (bois/métal)</option>
               </select>
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group">
-              <label for="door-style">Estilo:</label>
+              <label for="door-style">Style:</label>
               <select id="door-style" v-model="form.doors.style" class="form-select">
-                <option value="">Seleccione...</option>
-                <option value="modern">Moderno</option>
-                <option value="classic">Clásico</option>
-                <option value="industrial">Industrial</option>
-                <option value="custom">Personalizado</option>
+                <option value="">Sélectionnez...</option>
+                <option value="modern">Moderne</option>
+                <option value="classic">Classique</option>
+                <option value="industrial">Industriel</option>
+                <option value="custom">Personnalisé</option>
               </select>
             </div>
             
             <div class="form-group">
-              <label for="door-dimensions">Dimensiones (ancho x alto en cm):</label>
-              <input type="text" id="door-dimensions" v-model="form.doors.dimensions" class="form-input" placeholder="Ej: 90x210">
+              <label for="door-dimensions">Dimensions (largeur x hauteur en cm):</label>
+              <input type="text" id="door-dimensions" v-model="form.doors.dimensions" class="form-input" placeholder="Ex: 90x210">
             </div>
           </div>
         </div>
         
-        <!-- añadi la opcion de OTROS, por si no coincidian con las demas -->
+        <!-- Options pour autres projets -->
         <div v-if="form.project_type === 'other'" class="options-group">
           <div class="form-group">
-            <label for="other-type">¿Qué necesitas?</label>
+            <label for="other-type">Que souhaitez-vous?</label>
             <select id="other-type" v-model="form.other.type" class="form-select">
-              <option value="">Seleccione...</option>
-              <option value="structure">Estructura metálica</option>
-              <option value="furniture">Mueble de metal</option>
-              <option value="art">Pieza artística/decorativa</option>
-              <option value="repair">Reparación</option>
-              <option value="custom">Proyecto personalizado</option>
+              <option value="">Sélectionnez...</option>
+              <option value="structure">Structure métallique</option>
+              <option value="furniture">Meuble en métal</option>
+              <option value="art">Pièce artistique/décorative</option>
+              <option value="repair">Réparation</option>
+              <option value="custom">Projet personnalisé</option>
             </select>
           </div>
           
           <div v-if="form.other.type" class="form-group">
-            <label for="other-details">Detalles adicionales:</label>
-            <textarea id="other-details" v-model="form.other.details" class="form-textarea" placeholder="Describe lo que necesitas..."></textarea>
+            <label for="other-details">Détails supplémentaires:</label>
+            <textarea id="other-details" v-model="form.other.details" class="form-textarea" placeholder="Décrivez ce dont vous avez besoin..."></textarea>
           </div>
         </div>
       </div>
       
-      <!-- Aqui permito al usuario hacer un prompt del proyecto y mejorarlo con "IA" -->
+      <!-- Description du projet -->
       <div class="description-section">
-        <h3 class="section-title">📝 Descripción del Proyecto</h3>
+        <h3 class="section-title">📝 Description du Projet</h3>
         
         <div class="form-group">
-          <label for="description">Cuéntanos más detalles sobre lo que necesitas:</label>
-          <textarea id="description" v-model="form.description" required class="form-textarea" placeholder="Describe tu proyecto con todos los detalles importantes..."></textarea>
+          <label for="description">Dites-nous en plus sur ce dont vous avez besoin:</label>
+          <textarea id="description" v-model="form.description" required class="form-textarea" placeholder="Décrivez votre projet avec tous les détails importants..."></textarea>
           
           <div class="ai-assistant">
             <button type="button" @click="improveDescription" class="action-btn improve-btn" :disabled="isImproving">
               <span class="icon">✨</span> 
-              {{ isImproving ? 'Generando...' : 'Mejorar descripción con IA' }}
+              {{ isImproving ? 'Génération...' : 'Améliorer la description avec IA' }}
             </button>
             
             <div v-if="aiSuggestions.length > 0" class="suggestions-box">
-              <h4>Sugerencias de la IA:</h4>
+              <h4>Suggestions de l'IA:</h4>
               <div v-for="(suggestion, index) in aiSuggestions" :key="index" class="suggestion-item">
                 <p>{{ suggestion }}</p>
-                <button type="button" @click="applySuggestion(suggestion)" class="suggestion-btn">Usar esta sugerencia</button>
+                <button type="button" @click="applySuggestion(suggestion)" class="suggestion-btn">Utiliser cette suggestion</button>
               </div>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- Adjuntos y envío -->
+      <!-- Pièces jointes et envoi -->
       <div class="attachments-section">
-        <h3 class="section-title">📎 Adjuntos</h3>
+        <h3 class="section-title">📎 Pièces jointes</h3>
         
         <div class="form-group">
-          <label for="files">Adjunta fotos, planos o referencias:</label>
+          <label for="files">Joignez des photos, plans ou références:</label>
           <input type="file" id="files" multiple @change="handleFiles" class="file-input" accept="image/*,.pdf,.doc,.docx">
           
           <div v-if="form.files.length > 0" class="file-preview">
@@ -254,87 +253,87 @@
           </div>
         </div>
         
-        <div class="form-group">
-          <label for="budget">Presupuesto aproximado (opcional):</label>
-          <input type="text" id="budget" v-model="form.budget" class="form-input" placeholder="Ej: 500-700€">
-        </div>
+        <!-- <div class="form-group">
+          <label for="budget">Budget approximatif (facultatif):</label>
+          <input type="text" id="budget" v-model="form.budget" class="form-input" placeholder="Ex: 500-700€">
+        </div> -->
         
         <div class="form-group">
-          <label for="timeline">¿Cuándo necesitas el proyecto?</label>
+          <label for="timeline">Quand avez-vous besoin du projet?</label>
           <select id="timeline" v-model="form.timeline" class="form-select">
-            <option value="">Sin prisa</option>
-            <option value="1-2 weeks">En 1-2 semanas</option>
-            <option value="3-4 weeks">En 3-4 semanas</option>
-            <option value="urgent">Urgente (lo antes posible)</option>
-            <option value="specific">Fecha específica</option>
+            <option value="">Pas pressé</option>
+            <option value="1-2 weeks">Dans 1-2 semaines</option>
+            <option value="3-4 weeks">Dans 3-4 semaines</option>
+            <option value="urgent">Urgent (dès que possible)</option>
+            <option value="specific">Date spécifique</option>
           </select>
         </div>
       </div>
       
       <div class="form-actions">
         <button type="submit" class="action-btn submit-btn">
-          <span class="icon">📨</span> Enviar Solicitud
+          <span class="icon">📨</span> Envoyer la Demande
         </button>
       </div>
     </form>
     
-    <!-- `pantalla de confirmación de la peticion -->
+    <!-- Écran de confirmation de la demande -->
     <div v-else class="confirmation-screen">
       <div class="confirmation-content">
         <div class="success-icon">✅</div>
-        <h3 class="confirmation-title">¡Solicitud enviada con éxito!</h3>
+        <h3 class="confirmation-title">Demande envoyée avec succès!</h3>
         
         <div class="request-summary">
-          <h4>Resumen de tu solicitud:</h4>
-          <p><strong>Tipo de proyecto:</strong> {{ getproject_typeLabel(savedRequest.project_type) }}</p>
-          <p><strong>Nombre:</strong> {{ savedRequest.name }}</p>
-          <p><strong>Contacto:</strong> {{ savedRequest.phone }} | {{ savedRequest.email }}</p>
-          <p v-if="savedRequest.address"><strong>Dirección:</strong> {{ savedRequest.address }}</p>
+          <h4>Résumé de votre demande:</h4>
+          <p><strong>Type de projet:</strong> {{ getproject_typeLabel(savedRequest.project_type) }}</p>
+          <p><strong>Nom:</strong> {{ savedRequest.name }}</p>
+          <p><strong>Contact:</strong> {{ savedRequest.phone }} | {{ savedRequest.email }}</p>
+          <p v-if="savedRequest.address"><strong>Adresse:</strong> {{ savedRequest.address }}</p>
           
-          <!-- los detalles específicos según el tipo de proyecto -->
+          <!-- Détails spécifiques selon le type de projet -->
           <div v-if="savedRequest.project_type === 'stairs'">
-            <p><strong>Tipo de escalera:</strong> {{ savedRequest.stairs.type || 'No especificado' }}</p>
-            <p><strong>Material:</strong> {{ savedRequest.stairs.material || 'No especificado' }}</p>
-            <p v-if="savedRequest.stairs.hasRailings === 'yes'"><strong>Estilo de barandillas:</strong> {{ savedRequest.stairs.railingsStyle || 'No especificado' }}</p>
+            <p><strong>Type d'escalier:</strong> {{ savedRequest.stairs.type || 'Non spécifié' }}</p>
+            <p><strong>Matériau:</strong> {{ savedRequest.stairs.material || 'Non spécifié' }}</p>
+            <p v-if="savedRequest.stairs.hasRailings === 'yes'"><strong>Style de rampes:</strong> {{ savedRequest.stairs.railingsStyle || 'Non spécifié' }}</p>
           </div>
           
           <div v-else-if="savedRequest.project_type === 'railings'">
-            <p><strong>Ubicación:</strong> {{ savedRequest.railings.location || 'No especificado' }}</p>
-            <p><strong>Material:</strong> {{ savedRequest.railings.material || 'No especificado' }}</p>
-            <p><strong>Estilo:</strong> {{ savedRequest.railings.style || 'No especificado' }}</p>
-            <p v-if="savedRequest.railings.height"><strong>Altura:</strong> {{ savedRequest.railings.height }} cm</p>
+            <p><strong>Emplacement:</strong> {{ savedRequest.railings.location || 'Non spécifié' }}</p>
+            <p><strong>Matériau:</strong> {{ savedRequest.railings.material || 'Non spécifié' }}</p>
+            <p><strong>Style:</strong> {{ savedRequest.railings.style || 'Non spécifié' }}</p>
+            <p v-if="savedRequest.railings.height"><strong>Hauteur:</strong> {{ savedRequest.railings.height }} cm</p>
           </div>
           
           <div v-else-if="savedRequest.project_type === 'doors'">
-            <p><strong>Tipo de puerta:</strong> {{ savedRequest.doors.type || 'No especificado' }}</p>
-            <p><strong>Material:</strong> {{ savedRequest.doors.material || 'No especificado' }}</p>
-            <p><strong>Estilo:</strong> {{ savedRequest.doors.style || 'No especificado' }}</p>
-            <p v-if="savedRequest.doors.dimensions"><strong>Dimensiones:</strong> {{ savedRequest.doors.dimensions }}</p>
+            <p><strong>Type de porte:</strong> {{ savedRequest.doors.type || 'Non spécifié' }}</p>
+            <p><strong>Matériau:</strong> {{ savedRequest.doors.material || 'Non spécifié' }}</p>
+            <p><strong>Style:</strong> {{ savedRequest.doors.style || 'Non spécifié' }}</p>
+            <p v-if="savedRequest.doors.dimensions"><strong>Dimensions:</strong> {{ savedRequest.doors.dimensions }}</p>
           </div>
           
           <div v-else-if="savedRequest.project_type === 'other'">
-            <p><strong>Tipo:</strong> {{ savedRequest.other.type || 'No especificado' }}</p>
-            <p v-if="savedRequest.other.details"><strong>Detalles:</strong> {{ savedRequest.other.details }}</p>
+            <p><strong>Type:</strong> {{ savedRequest.other.type || 'Non spécifié' }}</p>
+            <p v-if="savedRequest.other.details"><strong>Détails:</strong> {{ savedRequest.other.details }}</p>
           </div>
           
-          <p><strong>Descripción:</strong> {{ savedRequest.description }}</p>
-          <p v-if="savedRequest.budget"><strong>Presupuesto:</strong> {{ savedRequest.budget }}</p>
-          <p v-if="savedRequest.timeline"><strong>Plazo:</strong> {{ savedRequest.timeline }}</p>
-          <p v-if="savedRequest.files.length > 0"><strong>Archivos adjuntos:</strong> {{ savedRequest.files.length }}</p>
+          <p><strong>Description:</strong> {{ savedRequest.description }}</p>
+          <p v-if="savedRequest.budget"><strong>Budget:</strong> {{ savedRequest.budget }}</p>
+          <p v-if="savedRequest.timeline"><strong>Délai:</strong> {{ savedRequest.timeline }}</p>
+          <p v-if="savedRequest.files.length > 0"><strong>Fichiers joints:</strong> {{ savedRequest.files.length }}</p>
         </div>
         
         <p class="confirmation-message">
-          Hemos recibido tu solicitud y nuestro equipo la está revisando. 
-          Te contactaremos en un plazo de 24-48 horas para discutir los detalles 
-          y proporcionarte un presupuesto detallado. Puedes registrarte y ver tus pedidos y solicitudes en tu perfil.
+          Nous avons reçu votre demande et notre équipe est en train de l'examiner. 
+          Nous vous contacterons dans un délai de 24 à 48 heures pour discuter des détails 
+          et vous fournir un devis détaillé. Vous pouvez vous inscrire et voir vos commandes et demandes dans votre profil.
         </p>
         
         <div class="confirmation-actions">
           <button @click="resetForm" class="action-btn submit-btn">
-            <span class="icon">➕</span> Enviar otra solicitud
+            <span class="icon">➕</span> Envoyer une autre demande
           </button>
           <button @click="downloadSummary" class="action-btn download-btn">
-            <span class="icon">📥</span> Descargar resumen
+            <span class="icon">📥</span> Télécharger le résumé
           </button>
         </div>
       </div>
@@ -368,10 +367,10 @@ export default {
       isImproving: false,
       aiSuggestions: [],
       project_types: [
-        { value: 'stairs', label: 'Escaleras', icon: '📶' },
-        { value: 'railings', label: 'Barandillas', icon: '🚧' },
-        { value: 'doors', label: 'Puertas', icon: '🚪' },
-        { value: 'other', label: 'Otro proyecto', icon: '🔩' }
+        { value: 'stairs', label: 'Escaliers', icon: '📶' },
+        { value: 'railings', label: 'Rampes', icon: '🚧' },
+        { value: 'doors', label: 'Portes', icon: '🚪' },
+        { value: 'other', label: 'Autre projet', icon: '🔩' }
       ],
       errorMessage: null
     };
@@ -379,7 +378,7 @@ export default {
   methods: {
     getproject_typeLabel(value) {
       const type = this.project_types.find(t => t.value === value);
-      return type ? type.label : 'No especificado';
+      return type ? type.label : 'Non spécifié';
     },
     selectproject_type(type) {
       this.form.project_type = type;
@@ -396,7 +395,7 @@ export default {
     },
     async improveDescription() {
       if (!this.form.description.trim()) {
-        alert('Por favor escribe una descripción inicial para que la IA pueda mejorarla');
+        alert('Veuillez écrire une description initiale pour que l\'IA puisse l\'améliorer');
         return;
       }
 
@@ -409,55 +408,55 @@ export default {
 
         if (this.form.project_type === 'stairs') {
           this.aiSuggestions = [
-            `Escalera de ${this.form.stairs.material || 'metal'} para ${this.form.stairs.type || 'interior/exterior'}. ` +
-            `Incluye ${this.form.stairs.hasRailings === 'yes' ? 'barandillas de estilo ' + (this.form.stairs.railingsStyle || 'moderno') : 'sin barandillas'}. ` +
-            `Necesito un diseño ${this.form.stairs.type === 'caracol' ? 'espiral que optimice el espacio' : 'funcional y resistente'}.`,
-            `Proyecto de escalera metálica con las siguientes características:\n` +
-            `- Tipo: ${this.form.stairs.type || 'por definir'}\n` +
-            `- Material principal: ${this.form.stairs.material || 'acero/inoxidable'}\n` +
-            `- Barandillas: ${this.form.stairs.hasRailings === 'yes' ? 'Sí, estilo ' + (this.form.stairs.railingsStyle || 'a elegir') : 'No'}\n` +
-            `- Requisitos adicionales: ${this.form.description || 'ninguno especificado'}`
+            `Escalier en ${this.form.stairs.material || 'métal'} pour ${this.form.stairs.type || 'intérieur/extérieur'}. ` +
+            `Comprend ${this.form.stairs.hasRailings === 'yes' ? 'rampes style ' + (this.form.stairs.railingsStyle || 'moderne') : 'sans rampes'}. ` +
+            `Besoin d'un design ${this.form.stairs.type === 'caracol' ? 'en spirale optimisant l\'espace' : 'fonctionnel et résistant'}.`,
+            `Projet d'escalier métallique avec les caractéristiques suivantes:\n` +
+            `- Type: ${this.form.stairs.type || 'à définir'}\n` +
+            `- Matériau principal: ${this.form.stairs.material || 'acier/inoxydable'}\n` +
+            `- Rampes: ${this.form.stairs.hasRailings === 'yes' ? 'Oui, style ' + (this.form.stairs.railingsStyle || 'à choisir') : 'Non'}\n` +
+            `- Exigences supplémentaires: ${this.form.description || 'aucune spécifiée'}`
           ];
         } else if (this.form.project_type === 'railings') {
           this.aiSuggestions = [
-            `Barandilla de ${this.form.railings.material || 'metal'} para ${this.form.railings.location || 'ubicación por definir'}. ` +
-            `Estilo ${this.form.railings.style || 'moderno'}, altura aproximada ${this.form.railings.height || '100'} cm. ` +
-            `Necesito que sea ${this.form.railings.location === 'pool' ? 'resistente a la humedad y con diseño seguro' : 'estética y funcional'}.`,
-            `Especificaciones para barandilla:\n` +
-            `- Ubicación: ${this.form.railings.location || 'por determinar'}\n` +
-            `- Material: ${this.form.railings.material || 'acero/inoxidable'}\n` +
-            `- Estilo: ${this.form.railings.style || 'moderno/clásico'}\n` +
-            `- Altura: ${this.form.railings.height || '100'} cm\n` +
-            `- Detalles adicionales: ${this.form.description || 'ninguno'}`
+            `Rambarde en ${this.form.railings.material || 'métal'} pour ${this.form.railings.location || 'emplacement à définir'}. ` +
+            `Style ${this.form.railings.style || 'moderne'}, hauteur approximative ${this.form.railings.height || '100'} cm. ` +
+            `Besoin qu'elle soit ${this.form.railings.location === 'pool' ? 'résistante à humidité et au design sécurisé' : 'esthétique et fonctionnelle'}.`,
+            `Spécifications pour rambarde:\n` +
+            `- Emplacement: ${this.form.railings.location || 'à déterminer'}\n` +
+            `- Matériau: ${this.form.railings.material || 'acier/inoxydable'}\n` +
+            `- Style: ${this.form.railings.style || 'moderne/classique'}\n` +
+            `- Hauteur: ${this.form.railings.height || '100'} cm\n` +
+            `- Détails supplémentaires: ${this.form.description || 'aucun'}`
           ];
         } else if (this.form.project_type === 'doors') {
           this.aiSuggestions = [
-            `Puerta de ${this.form.doors.material || 'metal'} para ${this.form.doors.type || 'uso por definir'}. ` +
-            `Estilo ${this.form.doors.style || 'moderno'}, dimensiones ${this.form.doors.dimensions || 'estándar'}. ` +
-            `Requisitos: ${this.form.doors.type === 'security' ? 'alta seguridad y resistencia' : 'diseño atractivo y funcionalidad'}.`,
-            `Detalles para puerta metálica:\n` +
-            `- Tipo: ${this.form.doors.type || 'exterior/interior'}\n` +
-            `- Material: ${this.form.doors.material || 'acero/hierro'}\n` +
-            `- Estilo: ${this.form.doors.style || 'moderno/clásico'}\n` +
-            `- Dimensiones: ${this.form.doors.dimensions || 'por determinar'}\n` +
-            `- Consideraciones especiales: ${this.form.description || 'ninguna'}`
+            `Porte en ${this.form.doors.material || 'métal'} pour ${this.form.doors.type || 'usage à définir'}. ` +
+            `Style ${this.form.doors.style || 'moderne'}, dimensions ${this.form.doors.dimensions || 'standard'}. ` +
+            `Exigences: ${this.form.doors.type === 'security' ? 'haute sécurité et résistance' : 'design attrayant et fonctionnalité'}.`,
+            `Détails pour porte métallique:\n` +
+            `- Type: ${this.form.doors.type || 'extérieur/intérieur'}\n` +
+            `- Matériau: ${this.form.doors.material || 'acier/fer'}\n` +
+            `- Style: ${this.form.doors.style || 'moderne/classique'}\n` +
+            `- Dimensions: ${this.form.doors.dimensions || 'à déterminer'}\n` +
+            `- Considérations spéciales: ${this.form.description || 'aucune'}`
           ];
         } else {
           this.aiSuggestions = [
-            `Proyecto de soldadura personalizado. Tipo: ${this.form.other.type || 'estructura/mueble/arte'}. ` +
-            `Detalles: ${this.form.other.details || 'por especificar'}. ` +
-            `Requisitos técnicos: ${this.form.description || 'ninguno indicado'}.`,
-            `Descripción detallada del proyecto:\n` +
-            `- Tipo: ${this.form.other.type || 'personalizado'}\n` +
-            `- Materiales preferidos: ${this.form.description.includes('material') ? '' : 'por determinar'}\n` +
-            `- Dimensiones aproximadas: ${this.form.description.includes('medida') ? '' : 'no especificadas'}\n` +
-            `- Uso/función: ${this.form.other.details || 'por definir'}\n` +
-            `- Detalles adicionales: ${this.form.description || 'ninguno'}`
+            `Projet de soudure personnalisé. Type: ${this.form.other.type || 'structure/meuble/art'}. ` +
+            `Détails: ${this.form.other.details || 'à spécifier'}. ` +
+            `Exigences techniques: ${this.form.description || 'aucune indiquée'}.`,
+            `Description détaillée du projet:\n` +
+            `- Type: ${this.form.other.type || 'personnalisé'}\n` +
+            `- Matériaux préférés: ${this.form.description.includes('matériau') ? '' : 'à déterminer'}\n` +
+            `- Dimensions approximatives: ${this.form.description.includes('mesure') ? '' : 'non spécifiées'}\n` +
+            `- Usage/fonction: ${this.form.other.details || 'à définir'}\n` +
+            `- Détails supplémentaires: ${this.form.description || 'aucun'}`
           ];
         }
       } catch (error) {
-        console.error('Error al mejorar la descripción:', error);
-        alert('Ocurrió un error al generar sugerencias. Por favor inténtalo de nuevo.');
+        console.error('Erreur lors de l\'amélioration de la description:', error);
+        alert('Une erreur est survenue lors de la génération des suggestions. Veuillez réessayer.');
       } finally {
         this.isImproving = false;
       }
@@ -468,7 +467,7 @@ export default {
     },
     async submitRequest() {
       if (!this.form.project_type) {
-        alert('Por favor selecciona el tipo de proyecto');
+        alert('Veuillez sélectionner le type de projet');
         return;
       }
       this.errorMessage = null;
@@ -492,7 +491,7 @@ export default {
         const data = await submitProjectRequest(formData);
         this.savedRequest = JSON.parse(JSON.stringify(this.form));
         this.requestSent = true;
-        console.log('Solicitud enviada:', this.savedRequest);
+        console.log('Demande envoyée:', this.savedRequest);
       } catch (error) {
         this.errorMessage = error.message;
       } finally {
@@ -519,7 +518,7 @@ export default {
       this.aiSuggestions = [];
     },
     downloadSummary() {
-      alert('Funcionalidad de descarga activada (simulación)');
+      alert('Fonctionnalité de téléchargement activée (simulation)');
     }
   }
 };
@@ -528,18 +527,32 @@ export default {
 <style scoped>
 .project-request-container {
   max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
+  margin: 1rem auto;
+  padding: 1rem;
   background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .title {
   text-align: center;
   color: #2c3e50;
-  margin-bottom: 2rem;
-  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .project-request-container {
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
 }
 
 .section-title {
@@ -558,28 +571,37 @@ export default {
 
 .form-row {
   display: flex;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.form-row .form-group {
-  flex: 1;
+@media (min-width: 640px) {
+  .form-row {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  flex: 1;
+  min-width: 0; /* Para evitar desbordamiento en móviles */
 }
 
 .form-input, .form-textarea, .form-select {
-  padding: 0.8rem 1rem;
+  width: 100%;
+  padding: 0.75rem;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background-color: white;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .form-input, .form-textarea, .form-select {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
 }
 
 .form-input:focus, .form-textarea:focus, .form-select:focus {
@@ -603,9 +625,29 @@ export default {
 
 .project-type-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .project-type-options {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+.type-option {
+  padding: 1rem 0.75rem;
+  min-height: 80px;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .type-option {
+    padding: 1.5rem 1rem;
+    font-size: 1rem;
+  }
 }
 
 .type-option {
@@ -641,10 +683,11 @@ export default {
 
 .file-input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem;
   border: 1px dashed #ccc;
   border-radius: 8px;
   background-color: #f8f9fa;
+  touch-action: manipulation;
 }
 
 .file-input:hover {
@@ -658,7 +701,7 @@ export default {
 .file-item {
   display: flex;
   align-items: center;
-  padding: 0.6rem 1rem;
+  padding: 0.75rem;
   background-color: #f0f0f0;
   border-radius: 6px;
   margin-bottom: 0.5rem;
@@ -682,7 +725,9 @@ export default {
   color: #ff6b6b;
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 0 0.3rem;
+  padding: 0.5rem 0.75rem;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .ai-assistant {
@@ -704,11 +749,19 @@ export default {
 }
 
 .suggestion-item {
-  padding: 0.8rem;
+  padding: 0.75rem;
   margin: 0.5rem 0;
   background-color: white;
   border-radius: 6px;
   border-left: 3px solid #42b983;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .suggestion-item {
+    padding: 1rem;
+    font-size: 1rem;
+  }
 }
 
 .suggestion-btn {
@@ -733,13 +786,25 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.8rem 1.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  touch-action: manipulation;
+}
+
+@media (min-width: 768px) {
+  .action-btn {
+    width: auto;
+    padding: 0.8rem 1.5rem;
+    margin-top: 0;
+    font-size: 1rem;
+  }
 }
 
 .action-btn .icon {
@@ -796,12 +861,15 @@ export default {
 }
 
 .confirmation-content {
-  max-width: 700px;
-  margin: 0 auto;
-  background-color: white;
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 1rem;
+}
+
+@media (min-width: 768px) {
+  .confirmation-content {
+    padding: 2.5rem;
+    margin: 0 auto;
+  }
 }
 
 .success-icon {
@@ -873,6 +941,27 @@ export default {
   
   .confirmation-content {
     padding: 1.5rem;
+  }
+}
+
+/* Mejoras táctiles pour mobile */
+@media (max-width: 768px) {
+  input, select, textarea, button {
+    font-size: 16px !important; /* Previene zoom en iOS */
+  }
+
+  .type-option, .action-btn, .suggestion-btn {
+    min-height: 44px; /* Altura mínima para elementos táctiles */
+  }
+
+  .file-item {
+    padding: 0.75rem;
+  }
+
+  .remove-file-btn {
+    padding: 0.5rem 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 </style>
