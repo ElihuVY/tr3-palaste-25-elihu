@@ -242,7 +242,10 @@
         
         <div class="form-group">
           <label for="files">Joignez des photos, plans ou références:</label>
-          <input type="file" id="files" multiple @change="handleFiles" class="file-input" accept="image/*,.pdf,.doc,.docx">
+            <input type="file" id="files" multiple @change="handleFiles" class="file-input" accept="image/*,.pdf,.doc,.docx" aria-label="Joindre des fichiers (images, PDF, Word)">
+            <span style="display:block; margin-top:0.5rem; color:#555; font-size:0.95rem;">
+              Formats acceptés : images, PDF, Word. Sélectionnez ou glissez-déposez vos fichiers ici.
+            </span>
           
           <div v-if="form.files.length > 0" class="file-preview">
             <div v-for="(file, index) in form.files" :key="index" class="file-item">
@@ -253,10 +256,7 @@
           </div>
         </div>
         
-        <!-- <div class="form-group">
-          <label for="budget">Budget approximatif (facultatif):</label>
-          <input type="text" id="budget" v-model="form.budget" class="form-input" placeholder="Ex: 500-700€">
-        </div> -->
+      
         
         <div class="form-group">
           <label for="timeline">Quand avez-vous besoin du projet?</label>
@@ -517,8 +517,102 @@ export default {
       this.requestSent = false;
       this.aiSuggestions = [];
     },
-    downloadSummary() {
-      alert('Fonctionnalité de téléchargement activée (simulation)');
+    async downloadSummary() {
+      // Import jspdf dynamically to avoid SSR issues
+      const jsPDF = (await import('jspdf')).default;
+      
+      // Create new PDF document
+      const doc = new jsPDF();
+      
+      // Add PALASTE logo/header
+      doc.setFontSize(22);
+      doc.setTextColor(66, 185, 131); // Green color
+      doc.text('PALASTE', 105, 20, { align: 'center' });
+      
+      // Add request details
+      doc.setFontSize(14);
+      doc.setTextColor(0);
+      doc.text('RÉSUMÉ DE LA DEMANDE', 105, 35, { align: 'center' });
+      
+      // Set normal text format
+      doc.setFontSize(12);
+      doc.setTextColor(60, 60, 60);
+      
+      let y = 50;
+      const leftMargin = 20;
+      
+      // Add client info
+      doc.text(`Client: ${this.savedRequest.name}`, leftMargin, y);
+      y += 10;
+      doc.text(`Contact: ${this.savedRequest.phone} | ${this.savedRequest.email}`, leftMargin, y);
+      y += 10;
+      if (this.savedRequest.address) {
+        doc.text(`Adresse: ${this.savedRequest.address}`, leftMargin, y);
+        y += 10;
+      }
+      
+      // Add project details
+      doc.text(`Type de projet: ${this.getproject_typeLabel(this.savedRequest.project_type)}`, leftMargin, y);
+      y += 15;
+      
+      // Add specific project details based on type
+      if (this.savedRequest.project_type === 'stairs') {
+        doc.text('Détails de l\'escalier:', leftMargin, y);
+        y += 8;
+        doc.text(`• Type: ${this.savedRequest.stairs.type || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        doc.text(`• Matériau: ${this.savedRequest.stairs.material || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        if (this.savedRequest.stairs.hasRailings === 'yes') {
+          doc.text(`• Style de rampes: ${this.savedRequest.stairs.railingsStyle || 'Non spécifié'}`, leftMargin + 5, y);
+          y += 8;
+        }
+      } else if (this.savedRequest.project_type === 'railings') {
+        doc.text('Détails des rampes:', leftMargin, y);
+        y += 8;
+        doc.text(`• Emplacement: ${this.savedRequest.railings.location || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        doc.text(`• Matériau: ${this.savedRequest.railings.material || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        doc.text(`• Style: ${this.savedRequest.railings.style || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        if (this.savedRequest.railings.height) {
+          doc.text(`• Hauteur: ${this.savedRequest.railings.height} cm`, leftMargin + 5, y);
+          y += 8;
+        }
+      } else if (this.savedRequest.project_type === 'doors') {
+        doc.text('Détails de la porte:', leftMargin, y);
+        y += 8;
+        doc.text(`• Type: ${this.savedRequest.doors.type || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        doc.text(`• Matériau: ${this.savedRequest.doors.material || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        doc.text(`• Style: ${this.savedRequest.doors.style || 'Non spécifié'}`, leftMargin + 5, y);
+        y += 8;
+        if (this.savedRequest.doors.dimensions) {
+          doc.text(`• Dimensions: ${this.savedRequest.doors.dimensions}`, leftMargin + 5, y);
+          y += 8;
+        }
+      }
+      
+      y += 10;
+      
+      // Add description with word wrap
+      if (this.savedRequest.description) {
+        doc.text('Description:', leftMargin, y);
+        y += 8;
+        const splitDescription = doc.splitTextToSize(this.savedRequest.description, 170);
+        doc.text(splitDescription, leftMargin, y);
+        y += splitDescription.length * 7;
+      }
+      
+      // Add footer
+      doc.setFontSize(10);
+      doc.setTextColor(128, 128, 128);
+      doc.text('PALASTE - Services de Soudure Professionnels', 105, 280, { align: 'center' });
+      
+      // Save the PDF
+      doc.save('PALASTE-demande.pdf');
     }
   }
 };
