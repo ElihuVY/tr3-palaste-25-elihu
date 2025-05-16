@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ProjectRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\ProjectRequestMail;
+use Illuminate\Support\Facades\Mail;
 
 class ProjectRequestController extends Controller
 {
@@ -65,12 +67,19 @@ class ProjectRequestController extends Controller
             'user_id' => auth()->id()
         ]);
 
+        try {
+            Mail::to('elihuvaldelomar26@gmail.com')->send(new ProjectRequestMail($projectRequest));
+        } catch (\Exception $e) {
+            \Log::error('Error enviando email: ' . $e->getMessage());
+            // El proyecto se creó, pero falló el envío del correo
+            // Podemos continuar sin error fatal
+        }
+
         return response()->json([
             'message' => 'Solicitud de proyecto creada exitosamente',
             'data' => $projectRequest
         ], 201);
     }
-
 
     public function getProjectTypes()
     {

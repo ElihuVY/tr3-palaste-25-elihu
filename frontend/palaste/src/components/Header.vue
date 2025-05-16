@@ -52,8 +52,8 @@ visibleLog.value = isLoggedIn.value;
           <router-link to="/" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
             Accueil
           </router-link>
-          <router-link to="/tienda" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
-            Boutique
+          <router-link to="/galeria" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
+            Galerie
           </router-link>
           <router-link to="/presupuesto"
             class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
@@ -93,10 +93,10 @@ visibleLog.value = isLoggedIn.value;
     </router-link>
     <router-link 
       @click="closeMenu"
-      to="/tienda" 
+      to="/galeria" 
       class="block text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300"
     >
-      Boutique
+      Galerie
     </router-link>
     <router-link 
       @click="closeMenu"

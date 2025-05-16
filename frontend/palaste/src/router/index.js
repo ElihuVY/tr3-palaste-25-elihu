@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import HomeView from '@/views/HomeView.vue';
 import BudgetView from '@/views/BudgetView.vue';
-import ShopView from '@/views/ShopView.vue';
+import galeria from '@/views/Galeria.vue';
 
 import LoginView from '@/views/user/LoginView.vue';
 import RegisterView from '@/views/user/RegisterView.vue';
@@ -21,9 +21,9 @@ const routes = [
     component: BudgetView,
   },
   {
-    path: '/tienda', 
-    name: 'shop',
-    component: ShopView,
+    path: '/galeria', 
+    name: 'galeria',
+    component: galeria,
   },
   {
     path: '/iniciar-sesion', 
