@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\ProjectRequestMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ProjectRequestController extends Controller
 {
@@ -63,18 +64,22 @@ class ProjectRequestController extends Controller
             'budget' => $request->budget,
             'timeline' => $request->timeline,
             'files' => $filesPaths,
-            $request->project_type . '_details' => $details,
-            'user_id' => auth()->id()
+            $request->project_type . '_details' => $details
         ]);
 
-        try {
-            Mail::to('elihuvaldelomar26@gmail.com')->send(new ProjectRequestMail($projectRequest));
-        } catch (\Exception $e) {
-            \Log::error('Error enviando email: ' . $e->getMessage());
-            // El proyecto se creó, pero falló el envío del correo
-            // Podemos continuar sin error fatal
-        }
-
+            try {
+                Mail::to('palaste.pro@gmail.com')->send(new ProjectRequestMail($projectRequest));
+            } catch (\Throwable $e) {
+                Log::error('Error al enviar correo: ' . $e->getMessage());
+                Log::error('Stack trace: ' . $e->getTraceAsString());
+                // Opcionalmente, puedes notificar al usuario sobre el problema
+                return response()->json([
+                    'message' => 'Solicitud creada pero hubo un problema al enviar la notificación por correo',
+                    'data' => $projectRequest,
+                    'error' => 'Error de correo: ' . $e->getMessage()
+                ], 201);
+            }
+            
         return response()->json([
             'message' => 'Solicitud de proyecto creada exitosamente',
             'data' => $projectRequest

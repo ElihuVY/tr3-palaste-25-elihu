@@ -27,18 +27,6 @@
                 <p style="color: #444; background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 5px;">{{ $project->description }}</p>
             </div>
 
-            @if($project->files)
-                <div style="margin-top: 20px;">
-                    <p style="margin: 10px 0;"><strong style="color: #2c3e50;">Archivos adjuntos:</strong></p>
-                    <ul style="list-style-type: none; padding-left: 0;">
-                        @foreach ($project->files as $file)
-                            <li style="margin: 5px 0; padding: 8px; background-color: #f8f9fa; border-radius: 3px;">
-                                📎 {{ $file }}
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
         </div>
     </div>
 </body>
