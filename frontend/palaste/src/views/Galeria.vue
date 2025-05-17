@@ -15,15 +15,6 @@
           class="gallery-image"
           @load="handleImageLoad"
           loading="lazy">
-        <div class="image-overlay">
-          <h3>{{ image.title }}</h3>
-          <p>{{ image.description }}</p>
-        </div>
-      </div>
-      
-      <div v-if="isLoading" class="loading-indicator">
-        <div class="spinner"></div>
-        <p>Chargement de plus d'images...</p>
       </div>
     </div>
     
@@ -32,10 +23,6 @@
       <div class="modal-content">
         <button class="close-button" @click="closeImageModal">&times;</button>
         <img :src="selectedImage.url" :alt="selectedImage.title" class="modal-image">
-        <div class="modal-info">
-          <h2>{{ selectedImage.title }}</h2>
-          <p>{{ selectedImage.description }}</p>
-        </div>
       </div>
     </div>
   </div>
@@ -46,105 +33,55 @@ export default {
   name: 'GalleryView',
   data() {
     return {
-      images: [],
       displayedImages: [],
-      page: 1,
       isLoading: false,
       selectedImage: null,
-      imagesLoaded: 0,
-      observer: null
+      imagesLoaded: 0
     }
   },
   mounted() {
-    this.loadInitialImages();
-    
-    // Configurar Intersection Observer para detección de scroll
-    const options = {
-      rootMargin: '0px 0px 200px 0px',
-      threshold: 0.1
-    };
-    
-    this.observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !this.isLoading) {
-        this.loadMoreImages();
-      }
-    }, options);
-    
-    // Observar el último elemento para cargar más cuando sea visible
-    const observerTarget = document.createElement('div');
-    observerTarget.classList.add('observer-target');
-    this.$refs.galleryGrid.appendChild(observerTarget);
-    this.observer.observe(observerTarget);
-    
-    // Escuchar eventos de redimensionamiento de ventana
-    window.addEventListener('resize', this.handleResize);
-  },
-  beforeDestroy() {
-    this.observer.disconnect();
-    window.removeEventListener('resize', this.handleResize);
+    this.loadImages();
   },
   methods: {
-    // Generar datos de ejemplo para la galería
-    generateSampleImages(count, startIndex = 0) {
+    generateUniqueImages(count) {
       const images = [];
-      for (let i = 0; i < count; i++) {
-        const index = startIndex + i;
-        const isTall = Math.random() > 0.7; // 30% de las imágenes serán más altas
+      const totalImagesAvailable = 26; // Limitamos a 26 imágenes únicas
+      
+      for (let i = 0; i < count && i < totalImagesAvailable; i++) {
+        const index = i + 1;
+        const isTall = Math.random() > 0.7;
         
         images.push({
-          id: index,
-          url: `/api/placeholder/${isTall ? 400 : 500}/${isTall ? 600 : 400}`,
-          title: `Proyecto ${index + 1}`,
-          description: `Descripción del proyecto ${index + 1}. Un breve texto sobre este trabajo.`,
+          id: i,
+          url: `/image${index}.webp`,
+          title: `Imagen ${index}`,
           isTall
         });
       }
       return images;
     },
     
-    loadInitialImages() {
+    loadImages() {
       this.isLoading = true;
       
-      // Simular carga de datos desde API
       setTimeout(() => {
-        this.images = this.generateSampleImages(12);
-        this.displayedImages = [...this.images];
+        this.displayedImages = this.generateUniqueImages(26);
         this.isLoading = false;
       }, 800);
     },
     
-    loadMoreImages() {
-      if (this.isLoading) return;
-      
-      this.isLoading = true;
-      this.page++;
-      
-      // Simular carga de datos adicionales
-      setTimeout(() => {
-        const newImages = this.generateSampleImages(8, this.images.length);
-        this.images = [...this.images, ...newImages];
-        this.displayedImages = [...this.images];
-        this.isLoading = false;
-      }, 1200);
-    },
-    
     handleImageLoad() {
       this.imagesLoaded++;
-      // Podríamos implementar alguna animación cuando las imágenes estén cargadas
-    },
-    
-    handleResize() {
-      // Podríamos ajustar el diseño si es necesario al cambiar el tamaño de la ventana
     },
     
     openImageModal(image) {
       this.selectedImage = image;
-      document.body.style.overflow = 'hidden'; // Evitar scroll en el fondo
+      document.body.style.overflow = 'hidden';
     },
     
     closeImageModal() {
       this.selectedImage = null;
-      document.body.style.overflow = ''; // Restaurar scroll
+      document.body.style.overflow = '';
     }
   }
 }
@@ -152,18 +89,25 @@ export default {
 
 <style scoped>
 .gallery-container {
-  max-width: 1200px;
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho de la pantalla */
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
+  overflow-y: auto; /* Permite el desplazamiento vertical */
 }
-
 .gallery-title {
   text-align: center;
   margin-bottom: 30px;
-  color: #333;
-  font-size: 32px;
-}
+  color: #3d4b74; /* Darker blue gray color */
+  font-size: 38px;
+  font-weight: 900; /* Increased font weight */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
 
+  font-family: 'Arial', sans-serif;
+}
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -194,37 +138,16 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .gallery-item:hover .gallery-image {
   transform: scale(1.05);
+  opacity: 0.9;
 }
 
 .image-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  color: white;
-  padding: 20px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.gallery-item:hover .image-overlay {
-  opacity: 1;
-}
-
-.image-overlay h3 {
-  margin: 0 0 5px 0;
-  font-size: 18px;
-}
-
-.image-overlay p {
-  margin: 0;
-  font-size: 14px;
+  display: none; /* Ocultamos completamente el overlay con la información */
 }
 
 .loading-indicator {
@@ -301,6 +224,7 @@ export default {
 }
 
 .modal-info {
+  display: none; /* Ocultamos la información en el modal */
   padding: 20px;
   background-color: white;
 }

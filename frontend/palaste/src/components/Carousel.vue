@@ -27,10 +27,10 @@
               Tout ce dont vous avez besoin pour souder comme un professionnel
             </h2>
             <p class="text-sm md:text-lg lg:text-xl mb-4 md:mb-6 max-w-2xl font-poppins animate-fade-in animate-delay-200 px-4 md:px-0">
-              Trouvez les meilleurs matériaux, casques, outils et plus encore. Qualité et durabilité au meilleur prix.
+              Découvrez notre galerie de projets exceptionnels et laissez-vous inspirer par notre savoir-faire unique.
             </p>
-            <router-link to="/tienda" class="bg-white text-black font-semibold py-2 px-4 md:px-6 rounded-lg hover:bg-gray-100 transition-all animate-fade-in animate-delay-400 font-poppins text-sm md:text-base">
-              Explorez notre boutique
+            <router-link to="/galeria" class="bg-white text-black font-semibold py-2 px-4 md:px-6 rounded-lg hover:bg-gray-100 transition-all animate-fade-in animate-delay-400 font-poppins text-sm md:text-base">
+              Explorez notre galerie
             </router-link>
           </div>
         </div>

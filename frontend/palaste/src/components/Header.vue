@@ -56,18 +56,18 @@ visibleLog.value = isLoggedIn.value;
             Galerie
           </router-link>
           <router-link to="/presupuesto"
-            class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
+            class="bg-gray-700 text-white hover:bg-gray-600 px-4 py-2 rounded-md transition duration-300 font-semibold">
             Demander un Projet
           </router-link>
 
-          <template v-if="!isLoggedIn">
+          <!-- <template v-if="!isLoggedIn">
             <router-link to="/iniciar-sesion"
               class="bg-gray-700 text-white hover:bg-gray-600 px-4 py-2 rounded-md transition duration-300 font-semibold">
               Se Connecter
             </router-link>
-          </template>
+          </template> -->
 
-          <template v-else>
+          <!-- <template v-else>
             <router-link to="/perfil" class="text-white hover:bg-gray-700 px-4 py-2 rounded-md transition duration-300">
               Profil
             </router-link>
@@ -75,7 +75,7 @@ visibleLog.value = isLoggedIn.value;
             <button @click="salir" class="text-white hover:bg-red-600 px-4 py-2 rounded-md transition duration-300">
               Déconnexion
             </button>
-          </template>
+          </template> -->
         </div>
       </div>
 
